@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('typed-text')) {
         new Typed('#typed-text', {
             strings: [
-                'Full-Stack Developer',
+                ' Aspiring Full-Stack Developer',
                 'Computer Science Student',
                 'UI/UX Enthusiast',
                 'Web Application Engineer'
