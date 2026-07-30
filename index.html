@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pabitra Nayak | Full-Stack Developer & UI/UX Designer</title>
+    
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress"></div>
+
+    <!-- Cursor Glow Effect -->
+    <div id="cursor-glow"></div>
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top glass-nav">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-gradient" href="#hero">&lt;Pabitra /&gt;</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="fa-solid fa-bars text-light"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto text-center gap-lg-3">
+                    <li class="nav-item"><a class="nav-link active" href="#hero">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#experience">Experience & Education</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#certificates">Certificates</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="d-flex align-items-center min-vh-100 position-relative">
+        <div class="container">
+            <div class="row align-items-center gy-5">
+                <!-- Left Side: Text & Info -->
+                <div class="col-lg-7" data-aos="fade-right">
+                    <span class="badge glass-badge mb-3">
+                        <i class="fa-solid fa-circle text-success me-2"></i>Available for Hire
+                    </span>
+                    <h1 class="display-3 fw-bold text-light mb-3">
+                        Hi, I'm <span class="text-gradient">Pabitra Nayak</span>
+                    </h1>
+                    <h3 class="h2 text-secondary mb-4">I am a <span id="typed-text"></span></h3>
+                    <p class="lead text-muted mb-4 pe-lg-5">
+                        Passionate Computer Science Student & Full-Stack Developer specializing in building modern, scalable, and visually stunning web applications.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <a href="#contact" class="btn btn-gradient btn-lg">Hire Me <i class="fa-solid fa-arrow-right ms-2"></i></a>
+                        <a href="#" class="btn btn-outline-glass btn-lg"><i class="fa-solid fa-download me-2"></i>Download CV</a>
+                    </div>
+                    <div class="d-flex gap-3 social-links">
+                        <a href="https://github.com/pabitranayak0019-developer" target="_blank" class="glass-icon"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://x.com/23cs13244161" target="_blank" class="glass-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://twitter.com/pabitranayak0019" target="_blank" class="glass-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/pabiitra.nayak?igsh=cmw0OHc4YWhxaHAz" target="_blank" class="glass-icon"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Right Side: 3D Photo Display -->
+                <div class="col-lg-5 text-center position-relative" data-aos="zoom-in">
+                    <div class="hero-3d-wrapper">
+                        <div class="glass-circle shape-1 floating"></div>
+                        <div class="glass-circle shape-2 floating-delayed"></div>
+                        <div class="hero-photo-frame js-tilt">
+                            <img src="assets/images/me.jpeg"
+                                 alt="Pabitra Nayak" 
+                                 class="img-fluid hero-profile-img floating"
+                                 onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5 position-relative">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-gradient fw-bold text-uppercase">Get To Know Me</h6>
+                <h2 class="display-5 fw-bold text-light">About Me</h2>
+            </div>
+            
+            <div class="row gy-4 align-items-center">
+                <div class="col-lg-5 text-center mb-4 mb-lg-0" data-aos="fade-right">
+                    <div class="d-inline-block position-relative">
+                        <div class="js-tilt" style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 30px rgba(0,242,254,0.2);">
+                            <img src="assets/images/about.jpeg" 
+                                 alt="Pabitra Nayak" 
+                                 style="width: 280px; height: 280px; object-fit: cover; border-radius: 50% !important; border: 3px solid #00f2fe; display: block;"
+                                 onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600'">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div class="glass-card p-4 p-md-5">
+                        <h3 class="text-light mb-3">Architecting Digital Experiences</h3>
+                        <p class="text-muted mb-4">
+                            I am a dedicated Computer Science Student & Software Developer with expertise in high-performance web development, responsive architectures, and interactive 3D interfaces.
+                        </p>
+                        
+                        <ul class="list-unstyled mb-4 d-flex flex-column gap-3">
+                            <li class="d-flex align-items-center">
+                                <i class="fa-solid fa-user text-gradient me-3 fs-5"></i>
+                                <strong class="me-2 text-light">Name:</strong> Pabitra Nayak
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <i class="fa-solid fa-graduation-cap text-gradient me-3 fs-5"></i>
+                                <strong class="me-2 text-light">Status:</strong> Computer Science Student
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <i class="fa-solid fa-envelope text-gradient me-3 fs-5"></i>
+                                <strong class="me-2 text-light">Email:</strong> pabitranayak0017@gmail.com
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <i class="fa-solid fa-location-dot text-gradient me-3 fs-5"></i>
+                                <strong class="me-2 text-light">Location:</strong> Odisha, India
+                            </li>
+                        </ul>
+
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="p-3 glass-inner rounded text-center">
+                                    <h4 class="text-gradient mb-0"><span class="counter" data-target="3">0</span>+</h4>
+                                    <small class="text-muted">Years Experience</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 glass-inner rounded text-center">
+                                    <h4 class="text-gradient mb-0"><span class="counter" data-target="25">0</span>+</h4>
+                                    <small class="text-muted">Projects Completed</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-5 position-relative">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-gradient fw-bold text-uppercase">Technical Proficiency</h6>
+                <h2 class="display-5 fw-bold text-light">Skills & Expertise</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="glass-card skill-card p-4 text-center js-tilt">
+                        <div class="skill-icon mb-3"><i class="fa-brands fa-html5"></i></div>
+                        <h4 class="text-light h5">Frontend Development</h4>
+                        <p class="small text-muted mb-0">HTML5, CSS3, JavaScript, Bootstrap, React</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="glass-card skill-card p-4 text-center js-tilt">
+                        <div class="skill-icon mb-3"><i class="fa-solid fa-code"></i></div>
+                        <h4 class="text-light h5">Programming</h4>
+                        <p class="small text-muted mb-0">JavaScript (ES6+), C++, Python, Java</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="glass-card skill-card p-4 text-center js-tilt">
+                        <div class="skill-icon mb-3"><i class="fa-solid fa-database"></i></div>
+                        <h4 class="text-light h5">Databases</h4>
+                        <p class="small text-muted mb-0">MySQL, MongoDB, PostgreSQL</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="glass-card skill-card p-4 text-center js-tilt">
+                        <div class="skill-icon mb-3"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                        <h4 class="text-light h5">Tools & Deployment</h4>
+                        <p class="small text-muted mb-0">Git, GitHub, VS Code, Vercel, Figma</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <div id="projects" class="py-5 position-relative">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-gradient fw-bold text-uppercase">Featured Works</h6>
+                <h2 class="display-5 fw-bold text-light">Recent Projects</h2>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
+                        <div>
+                            <img src="assets/images/shop.png" class="img-fluid project-img w-100" alt="Mini Amazon E-Commerce" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
+                            <div class="p-4 pb-0">
+                                <h4 class="text-light h5 mb-2">Mini Amazon E-Commerce</h4>
+                                <p class="text-muted small mb-3">Modern online shopping portal featuring tech deals, product categories, and dynamic cart UI.</p>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="badge glass-badge">HTML5</span>
+                                    <span class="badge glass-badge">Bootstrap 5</span>
+                                    <span class="badge glass-badge">CSS</span>
+                                    <span class="badge glass-badge">JavaScript</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-0">
+                            <div class="d-flex gap-2">
+                                <a href="https://mini-amazon-shop.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
+                                <a href="https://github.com/pabitranayak0019-developer/Mini-Amazon-Shop.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
+                        <div>
+                           <img src="assets/images/img.png" class="img-fluid project-img w-100" alt="Text-To-Image AI Generator" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
+                            <div class="p-4 pb-0">
+                                <h4 class="text-light h5 mb-2">Text-To-Image AI Generator</h4>
+                                <p class="text-muted small mb-3">AI Image Generator transforming creative ideas into visually stunning images using AI APIs.</p>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="badge glass-badge">HTML</span>
+                                    <span class="badge glass-badge">JavaScript</span>
+                                    <span class="badge glass-badge">API</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-0">
+                            <div class="d-flex gap-2">
+                                <a href="https://text-to-image-livid.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
+                                <a href="https://github.com/pabitranayak0019-developer/TEXT_TO_IMAGE.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
+                        <div>
+                           <img src="assets/images/ALL.png" class="img-fluid project-img w-100" alt="ALL-IN-ONE-TOOL" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
+                            <div class="p-4 pb-0">
+                                <h4 class="text-light h5 mb-2">ALL-IN-ONE-TOOL</h4>
+                                <p class="text-muted small mb-3">All-in-One Student Tools platform offering multiple utility features in one place.</p>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="badge glass-badge">HTML</span>
+                                    <span class="badge glass-badge">JavaScript</span>
+                                    <span class="badge glass-badge">API</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-0">
+                            <div class="d-flex gap-2">
+                                <a href="https://all-in-one-tool-group-project.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
+                                <a href="https://github.com/suzenkumar/All-in-one-Tool-Group-Project-.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
+                        <div>
+                           <img src="assets/images/CV.png" class="img-fluid project-img w-100" alt="RESUME BUILDER" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
+                            <div class="p-4 pb-0">
+                                <h4 class="text-light h5 mb-2">RESUME BUILDER</h4>
+                                <p class="text-muted small mb-3">User-friendly resume creation tool with live dynamic template previews.</p>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="badge glass-badge">HTML</span>
+                                    <span class="badge glass-badge">JavaScript</span>
+                                    <span class="badge glass-badge">CSS3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-0">
+                            <div class="d-flex gap-2">
+                                <a href="https://resume-bulider-student.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
+                                <a href="https://github.com/pabitranayak0019-developer/RESUME-BULIDER.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
+                        <div>
+                           <img src="assets/images/QUIZ.png" class="img-fluid project-img w-100" alt="ONLINE QUIZ GAME" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
+                            <div class="p-4 pb-0">
+                                <h4 class="text-light h5 mb-2">ONLINE QUIZ GAME</h4>
+                                <p class="text-muted small mb-3">Interactive quiz engine with real-time scoring and category selector.</p>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="badge glass-badge">HTML</span>
+                                    <span class="badge glass-badge">JavaScript</span>
+                                    <span class="badge glass-badge">CSS</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-0">
+                            <div class="d-flex gap-2">
+                                <a href="https://quiz-game-three-rho.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
+                                <a href="https://github.com/pabitranayak0019-developer/quiz-Game.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience & Education Section -->
+    <section id="experience" class="py-5 position-relative">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-gradient fw-bold text-uppercase">Journey</h6>
+                <h2 class="display-5 fw-bold text-light">Experience & Education</h2>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h3 class="text-light mb-4"><i class="fa-solid fa-briefcase text-gradient me-2"></i>Experience</h3>
+                    <div class="timeline position-relative ps-4">
+                        <div class="glass-card p-4 mb-4 timeline-item js-tilt">
+                            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                                <span class="badge glass-badge">JUNE 2026 - JULY 2026</span>
+                                <a href="https://www.drdo.gov.in/drdo/" target="_blank" class="link-btn"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Visit Site</a>
+                            </div>
+                            <h5 class="text-light mb-1">DRDO, ITR(MET) INTERN</h5>
+                            <p class="text-gradient mb-2 fw-semibold">
+                                <a href="https://drive.google.com/file/d/1q1WWhlfxm2D0MCO5QIJYFyCp6PMDjyhp/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="company-link text-decoration-none text-gradient">
+                                    CERTIFICATE <i class="fa-solid fa-link ms-1 small"></i>
+                                </a>
+                            </p>
+                            <p class="small text-muted mb-0">Completed technical internship at DRDO, Integrated Test Range (ITR), Chandipur.</p>
+                        </div>
+
+                        <div class="glass-card p-4 timeline-item js-tilt">
+                            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                                <span class="badge glass-badge">AUG 2022 - SEP 2022</span>
+                                <a href="https://eduwebsoft.co.in/" target="_blank" rel="noopener noreferrer" class="link-btn"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Visit Site</a>
+                            </div>
+                            <h5 class="text-light mb-1">Web Development Intern</h5>
+                            <p class="text-gradient mb-2 fw-semibold">
+                                <a href="https://drive.google.com/file/d/1fIgkYExJUi7HKpvnkhpD34-DElp7xg4x/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="company-link text-decoration-none text-gradient">
+                                    Creative Digital Agency <i class="fa-solid fa-link ms-1 small"></i>
+                                </a>
+                            </p>
+                            <p class="small text-muted mb-0">Worked on cross-browser UI modules, dynamic form validations, and responsiveness.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6" data-aos="fade-left">
+                    <h3 class="text-light mb-4"><i class="fa-solid fa-graduation-cap text-gradient me-2"></i>Education</h3>
+                    <div class="timeline position-relative ps-4">
+                        <div class="glass-card p-4 mb-4 timeline-item js-tilt">
+                            <span class="badge glass-badge mb-2">Present</span>
+                            <h5 class="text-light mb-1">Bachelor of Technology (CSE)</h5>
+                            <p class="text-gradient mb-2 fw-semibold">Srinix College Of Engineering, Balasore, Odisha</p>
+                            <p class="small text-muted mb-0">Focused on Data Structures, Web Engineering, and Software Engineering.</p>
+                        </div>
+
+                        <div class="glass-card p-4 mb-4 timeline-item js-tilt">
+                            <span class="badge glass-badge mb-2">2021 - 2024</span>
+                            <h5 class="text-light mb-1">Diploma (CSE)</h5>
+                            <p class="text-gradient mb-2 fw-semibold">Balasore School Of Engineering, Balasore, Odisha</p>
+                            <p class="small text-muted mb-0">Gained strong fundamentals in computer science & software concepts.</p>
+                        </div>
+
+                        <div class="glass-card p-4 timeline-item js-tilt">
+                            <span class="badge glass-badge mb-2">2021</span>
+                            <h5 class="text-light mb-1">10th</h5>
+                            <p class="text-gradient mb-2 fw-semibold">Sri Satya Sai Vidya Vihar, Balasore, Odisha</p>
+                            <p class="small text-muted mb-0">Completed secondary education with strong science focus.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section id="certificates" class="py-5 position-relative">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-gradient fw-bold text-uppercase">Achievements</h6>
+                <h2 class="display-5 fw-bold text-light">My Certificates</h2>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="cert-icon"><i class="fa-solid fa-certificate text-gradient fs-2"></i></div>
+                                <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
+                            </div>
+                            <h4 class="text-light h5 mb-2">Introduction to Generative AI Studio</h4>
+                            <p class="text-gradient mb-2 fw-semibold">Google Cloud/ Simplilearn</p>
+                            <p class="small text-muted mb-3">Explores Generative AI models, prompt engineering, and best AI practices.</p>
+                        </div>
+                        <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Issued: March-2026</small>
+                            <a href="https://drive.google.com/file/d/1gmqa1PSgCsV7oQsDxMTAkv5Q9Llk1aJJ/view?usp=sharing" target="_blank" class="link-btn"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="cert-icon"><i class="fa-solid fa-award text-gradient fs-2"></i></div>
+                                <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
+                            </div>
+                            <h4 class="text-light h5 mb-2">PowerBI Workshop</h4>
+                            <p class="text-gradient mb-2 fw-semibold">OfficeMaster</p>
+                            <p class="small text-muted mb-3">Hands-on knowledge of data visualization and reporting dashboards using Power BI.</p>
+                        </div>
+                        <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Issued: Jan-2026</small>
+                            <a href="https://drive.google.com/file/d/1E9YHzXydDqIEgs9dJwGbS_a_tecxDtXz/view?usp=drive_link" target="_blank" class="link-btn"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="cert-icon"><i class="fa-solid fa-laptop-code text-gradient fs-2"></i></div>
+                                <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
+                            </div>
+                            <h4 class="text-light h5 mb-2">JAVASCRIPT COURSE</h4>
+                            <p class="text-gradient mb-2 fw-semibold">STP COMPUTER EDUCATION</p>
+                            <p class="small text-muted mb-3">Comprehensive JavaScript course covering fundamentals, DOM manipulation, and ES6+.</p>
+                        </div>
+                        <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Issued: Nov-2023</small>
+                            <a href="https://drive.google.com/file/d/17WwU380jESkOMj6-VZZGzwTAvcejBXR8/view?usp=drive_link" target="_blank" class="link-btn"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5 position-relative">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="text-gradient fw-bold text-uppercase">Get In Touch</h6>
+                <h2 class="display-5 fw-bold text-light">Contact Me</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-5" data-aos="fade-right">
+                    <div class="glass-card p-4 p-md-5 h-100">
+                        <h4 class="text-light mb-4">Let's Connect</h4>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="glass-icon me-3"><i class="fa-solid fa-location-dot"></i></div>
+                            <div>
+                                <h6 class="text-light mb-0">Location</h6>
+                                <small class="text-muted">Balasore, Odisha, India</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="glass-icon me-3"><i class="fa-solid fa-envelope"></i></div>
+                            <div>
+                                <h6 class="text-light mb-0">Email</h6>
+                                <small class="text-muted">pabitranayak0017@gmail.com</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="glass-icon me-3"><i class="fa-solid fa-phone"></i></div>
+                            <div>
+                                <h6 class="text-light mb-0">Phone</h6>
+                                <small class="text-muted">+91 6371258564</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Email Sending Contact Form -->
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div class="glass-card p-4 p-md-5">
+                        <form action="https://api.web3forms.com/submit" method="POST" id="contact-form">
+                            <!-- Integrated Web3Forms Access Key -->
+                            <input type="hidden" name="access_key" value="adce5312-55bd-4aca-8ffe-1ada66c86dbc">
+                            
+                            <!-- Email Subject in Inbox -->
+                            <input type="hidden" name="subject" value="New Portfolio Contact Form Submission">
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="text" name="name" class="form-control glass-input" placeholder="Your Name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" name="email" class="form-control glass-input" placeholder="Your Email" required>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" name="custom_subject" class="form-control glass-input" placeholder="Subject" required>
+                                </div>
+                                <div class="col-12">
+                                    <textarea name="message" class="form-control glass-input" rows="5" placeholder="Your Message" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-gradient w-100 py-3">Send Message <i class="fa-solid fa-paper-plane ms-2"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-footer py-4 border-top border-secondary border-opacity-25">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; Pabitra Nayak | Computer Science Student</p>
+        </div>
+    </footer>
+
+    <!-- Back To Top Button -->
+    <a href="#hero" id="backToTop" class="glass-icon position-fixed bottom-0 end-0 m-4 text-light"><i class="fa-solid fa-arrow-up"></i></a>
+
+    <!-- JavaScript Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Custom Application Logic -->
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

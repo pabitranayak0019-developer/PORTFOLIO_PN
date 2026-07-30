@@ -1,0 +1,384 @@
+
+/* Custom CSS Variables */
+:root {
+    --bg-dark: #0a0b10;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --primary-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    --neon-accent: #00f2fe;
+    --text-muted: #a0aec0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: #1a202c;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-accent);
+}
+
+/* Scroll Progress Bar */
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--primary-gradient);
+    z-index: 9999;
+    width: 0%;
+}
+
+/* Cursor Glow */
+#cursor-glow {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0,242,254,0.1) 0%, rgba(0,0,0,0) 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Particles Canvas */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Glassmorphism Components */
+.glass-nav {
+    background: rgba(10, 11, 16, 0.7);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: rgba(0, 242, 254, 0.4);
+}
+
+.glass-badge {
+    background: rgba(0, 242, 254, 0.1);
+    color: var(--neon-accent);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+.glass-icon {
+    width: 45px;
+    height: 45px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.glass-icon:hover {
+    background: var(--neon-accent);
+    color: #000;
+    box-shadow: 0 0 15px var(--neon-accent);
+}
+
+.glass-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+.glass-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--neon-accent);
+    box-shadow: none;
+    color: #fff;
+}
+
+/* Utilities */
+.text-gradient {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-gradient {
+    background: var(--primary-gradient);
+    color: #000;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+    color: #000;
+}
+
+.btn-outline-glass {
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    border-radius: 8px;
+}
+
+.btn-outline-glass:hover {
+    background: var(--glass-bg);
+    color: var(--neon-accent);
+    border-color: var(--neon-accent);
+}
+
+/* 3D Floating Animations */
+.floating {
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-delayed {
+    animation: float 6s ease-in-out 3s infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.glass-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,242,254,0.2) 0%, rgba(0,0,0,0) 70%);
+}
+
+.shape-1 { width: 200px; height: 200px; top: -10%; left: -10%; }
+.shape-2 { width: 300px; height: 300px; bottom: -10%; right: -10%; }
+
+.skill-icon {
+    font-size: 2.5rem;
+    color: var(--neon-accent);
+}
+
+.project-img {
+    transition: transform 0.5s ease;
+}
+
+.project-card:hover .project-img {
+    transform: scale(1.05);
+}
+
+#backToTop {
+    z-index: 99;
+}
+
+/* Hero & About Photo Custom Styling */
+.hero-photo-frame {
+    position: relative;
+    display: inline-block;
+    padding: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+}
+
+.hero-profile-img {
+    width: 320px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--neon-accent);
+}
+
+.about-photo-wrapper {
+    position: relative;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+
+.about-profile-img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.about-photo-wrapper:hover .about-profile-img {
+    transform: scale(1.03);
+}
+
+.glass-inner {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+}
+
+/* Timeline & Links CSS */
+.timeline {
+    border-left: 2px solid var(--glass-border);
+}
+
+.timeline-item {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 24px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--neon-accent);
+    box-shadow: 0 0 10px var(--neon-accent);
+    border: 2px solid var(--bg-dark);
+}
+
+/* Certificate Cards */
+.cert-card {
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cert-card:hover {
+    border-color: rgba(0, 242, 254, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 242, 254, 0.15);
+}
+
+.cert-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+}
+
+/* Company Link Styling */
+.company-link {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.2s ease, text-shadow 0.2s ease;
+}
+
+.company-link:hover {
+    opacity: 0.85;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+}
+
+/* Action Button Link */
+.link-btn {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--neon-accent);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.link-btn:hover {
+    background: var(--neon-accent);
+    color: #000;
+    border-color: var(--neon-accent);
+    box-shadow: 0 0 12px var(--neon-accent);
+
+    .about-photo-wrapper {
+    position: relative;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+
+
+.about-photo-wrapper {
+    position: relative;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.about-profile-img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+    transition: transform 0.5s ease;
+}
+
+.about-photo-wrapper:hover .about-profile-img {
+    transform: scale(1.04);
+}
+
+/* About Section Circular Photo Frame */
+.about-photo-frame {
+    position: relative;
+    display: inline-block;
+    padding: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+    transition: all 0.3s ease;
+}
+
+.about-photo-frame:hover {
+    border-color: rgba(0, 242, 254, 0.5);
+    box-shadow: 0 0 45px rgba(0, 242, 254, 0.35);
+}
+
+.about-profile-circle-img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--neon-accent);
+    display: block;
+}
+
+@media (max-width: 576px) {
+    .about-profile-circle-img {
+        width: 220px;
+        height: 220px;
+    }
+}
