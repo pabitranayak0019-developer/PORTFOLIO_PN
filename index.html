@@ -1,826 +1,2970 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pabitra Nayak | Full-Stack Developer & UI/UX Designer</title>
-    
-    <!-- SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <!-- Bootstrap 5.3 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome 6 Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <title>PABITRA NAYAK // Computer Science Student & Software Developer</title>
+    <style>
+        /* ==========================================================================
+           1. RESET & CSS VARIABLES
+           ========================================================================== */
+        :root {
+            --bg-dark: #07050b;
+            --bg-card: rgba(18, 14, 28, 0.75);
+            --border-purple: rgba(168, 85, 247, 0.25);
+            --purple-accent: #a855f7;
+            --purple-glow: #7e22ce;
+            --purple-light: #c084fc;
+            --teal-accent: #2dd4bf;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07050b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.4);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--purple-accent);
+        }
+
+        /* ==========================================================================
+           2. LIGHT PRELOADER / INTRO SCREEN
+           ========================================================================== */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f0f4f8;
+            color: #0f172a;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+        }
+
+        #preloader.loaded {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .marquee-wrapper {
+            position: absolute;
+            width: 100%;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .marquee-text {
+            font-size: clamp(3.5rem, 8vw, 9rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            color: #000;
+            text-transform: uppercase;
+            animation: marquee 25s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .loader-pill {
+            position: relative;
+            z-index: 2;
+            background: #09090b;
+            color: #ffffff;
+            padding: 14px 28px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .loader-pill-bar {
+            width: 40px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-pill-fill {
+            height: 100%;
+            width: 0%;
+            background: #ffffff;
+            border-radius: 6px;
+            transition: width 0.1s linear;
+        }
+
+        .top-corner-mark {
+            position: absolute;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: #475569;
+        }
+        .top-left-mark { top: 30px; left: 40px; }
+        .top-right-mark { top: 30px; right: 40px; }
+
+        /* ==========================================================================
+           3. BACKGROUND CANVASES & LIGHTING
+           ========================================================================== */
+        #character-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .purple-ambient-light {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            width: 650px;
+            height: 650px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, rgba(126, 34, 206, 0.08) 45%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .purple-orb {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 45px;
+            height: 45px;
+            background: radial-gradient(circle at 30% 30%, #f3e8ff, #a855f7);
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.6), 0 0 50px rgba(168, 85, 247, 0.3);
+            pointer-events: none;
+            will-change: transform;
+            opacity: 0.75;
+        }
+
+        .purple-orb-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: float-orb-pulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes float-orb-pulse {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            100% { transform: scale(1.1); opacity: 0.9; box-shadow: 0 0 35px rgba(192, 132, 252, 0.8); }
+        }
+
+        /* ==========================================================================
+           4. NAVIGATION BAR & SOCIAL SIDEBAR
+           ========================================================================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 25px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(7, 5, 11, 0.95) 0%, rgba(7, 5, 11, 0) 100%);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .header-email {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .header-email:hover { color: #fff; }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--purple-light);
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 22px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #fff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .social-sidebar {
+            position: fixed;
+            left: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            z-index: 50;
+        }
+
+        .social-icon {
+            color: rgba(255, 255, 255, 0.85);
+            width: 20px;
+            height: 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-icon:hover {
+            color: var(--purple-light);
+            transform: scale(1.25);
+            filter: drop-shadow(0 0 8px var(--purple-accent));
+        }
+
+        .resume-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            z-index: 50;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .resume-btn:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* ==========================================================================
+           5. HERO SECTION
+           ========================================================================== */
+        main {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8% 0 100px;
+            position: relative;
+        }
+
+        .hero-left {
+            max-width: 420px;
+            z-index: 15;
+        }
+
+        .hero-greeting {
+            color: var(--purple-light);
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-name {
+            font-size: clamp(2.4rem, 4.2vw, 4rem);
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.05;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .hero-right {
+            max-width: 580px;
+            text-align: left;
+            z-index: 15;
+            margin-top: 40px;
+        }
+
+        .hero-prefix {
+            color: var(--purple-light);
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .hero-title-solid {
+            font-size: clamp(1.4rem, 2.4vw, 2.5rem);
+            font-weight: 900;
+            color: rgba(168, 85, 247, 0.4);
+            line-height: 1.2;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: -5px;
+            min-height: 2.4em;
+            width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            background-color: var(--purple-light);
+            width: 3px;
+            animation: blink 0.7s infinite;
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .hero-title-stacked {
+            font-size: clamp(1.8rem, 3.2vw, 3.2rem);
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.1;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* ==========================================================================
+           6. ABOUT ME SECTION
+           ========================================================================== */
+        #about.about-section-recreated {
+            min-height: 100vh;
+            width: 100%;
+            padding: 120px 8% 80px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(180deg, rgba(7, 5, 11, 0.4) 0%, rgba(10, 7, 18, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .about-top-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--purple-light);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-align: left;
+            width: 100%;
+            max-width: 1350px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .about-main-title {
+            font-size: clamp(2.2rem, 3.5vw, 3rem);
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            text-align: left;
+            width: 100%;
+            max-width: 1350px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .about-container {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .about-avatar-wrapper {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .about-avatar-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 390px;
+            height: 390px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+            box-shadow: 0 0 50px rgba(168, 85, 247, 0.3);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .about-photo {
+            width: 360px;
+            height: 360px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--purple-accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(168, 85, 247, 0.4);
+            position: relative;
+            z-index: 2;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+        }
+
+        .about-photo:hover {
+            transform: scale(1.02);
+            border-color: var(--purple-light);
+        }
+
+        .about-content-right {
+            z-index: 10;
+            background: var(--bg-card);
+            border: 1px solid var(--border-purple);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .about-content-right h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .about-description {
+            color: var(--text-muted);
+            font-size: 1.02rem;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .about-details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 35px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px 0;
+        }
+
+        .about-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+        }
+
+        .about-detail-item svg {
+            width: 18px;
+            height: 18px;
+            color: var(--purple-accent);
+            flex-shrink: 0;
+        }
+
+        .about-detail-item span {
+            color: var(--text-muted);
+        }
+
+        .about-detail-item strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .about-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .about-stat-box {
+            background: rgba(10, 7, 18, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .about-stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--purple-light);
+            font-family: var(--font-mono);
+            margin-bottom: 4px;
+        }
+
+        .about-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-mono);
+        }
+
+        /* ==========================================================================
+           7. MY TECHSTACK 3D FLOATING & ORBITING BALLOON ORBS SECTION
+           ========================================================================== */
+        #skills.techstack-section {
+            min-height: 100vh;
+            width: 100%;
+            padding: 100px 5% 100px 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: rgba(10, 7, 18, 0.98);
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .techstack-title-wrapper {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .techstack-main-title {
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 35px rgba(168, 85, 247, 0.5);
+            animation: titleGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
+            100% { text-shadow: 0 0 45px rgba(192, 132, 252, 0.8), 0 0 10px rgba(255, 255, 255, 0.5); }
+        }
+
+        .tech-orbs-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1.5px dashed rgba(168, 85, 247, 0.25);
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+        }
+        .orbit-ring-1 {
+            width: 320px;
+            height: 320px;
+            transform: rotateX(68deg) rotateY(-12deg);
+        }
+        .orbit-ring-2 {
+            width: 580px;
+            height: 580px;
+            transform: rotateX(72deg) rotateY(15deg);
+        }
+        .orbit-ring-3 {
+            width: 820px;
+            height: 820px;
+            transform: rotateX(65deg) rotateY(-8deg);
+        }
+
+        .tech-orb {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: #fff;
+            padding: 12px;
+            box-shadow: inset -10px -10px 25px rgba(0, 0, 0, 0.8), 
+                        0 12px 30px rgba(0, 0, 0, 0.6), 
+                        0 0 25px rgba(168, 85, 247, 0.5);
+            cursor: pointer;
+            user-select: none;
+            backdrop-filter: blur(6px);
+            will-change: transform, left, top;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .tech-orb::after {
+            content: '';
+            position: absolute;
+            top: 12%;
+            left: 20%;
+            width: 25%;
+            height: 15%;
+            background: rgba(255, 255, 255, 0.45);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+            filter: blur(1px);
+        }
+
+        .tech-orb:hover {
+            z-index: 100 !important;
+            box-shadow: inset -8px -8px 20px rgba(0, 0, 0, 0.4), 
+                        0 20px 45px rgba(168, 85, 247, 0.8), 
+                        0 0 60px var(--purple-light);
+        }
+
+        .tech-categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+            margin-top: 40px;
+            z-index: 10;
+        }
+
+        .tech-category-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-purple);
+            border-radius: 16px;
+            padding: 22px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tech-category-box:hover {
+            transform: translateY(-4px);
+            border-color: var(--purple-light);
+        }
+
+        .tech-category-box h4 {
+            color: var(--purple-light);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .tech-category-box ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tech-category-box li {
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            color: #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           8. EDUCATION SECTION (TIMELINE STYLE)
+           ========================================================================== */
+        #education.content-section {
+            min-height: 100vh;
+            padding: 120px 8% 120px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            background: rgba(7, 5, 11, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-header {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            letter-spacing: 1px;
+        }
+
+        .section-header span {
+            color: var(--purple-accent);
+            font-family: var(--font-mono);
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(180deg, var(--purple-accent), rgba(168, 85, 247, 0.2));
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px var(--purple-accent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 70px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 44%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-purple);
+            border-radius: 16px;
+            padding: 26px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--purple-light);
+            box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18px;
+            height: 18px;
+            background: var(--bg-dark);
+            border: 3px solid var(--purple-light);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--purple-accent);
+            z-index: 10;
+        }
+
+        .timeline-date {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--purple-light);
+            margin-bottom: 6px;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .timeline-subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .timeline-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .timeline-visual-card {
+            width: 44%;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(14, 11, 22, 0.8) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 20px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+        }
+
+        .timeline-visual-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: holo-scan 4s linear infinite;
+        }
+
+        @keyframes holo-scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .holo-badge {
+            font-family: var(--font-mono);
+            color: var(--purple-light);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-align: center;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+        }
+
+        /* ==========================================================================
+           9. MY WORK / PROJECTS SECTION (SLIDER CAROUSEL STYLE)
+           ========================================================================== */
+        #work.projects-section {
+            min-height: 100vh;
+            padding: 120px 8% 120px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: rgba(10, 7, 18, 0.96);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .work-carousel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+        }
+
+        .work-slide {
+            display: none;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            animation: fadeInProject 0.6s ease forwards;
+        }
+
+        .work-slide.active {
+            display: grid;
+        }
+
+        @keyframes fadeInProject {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .work-preview-card {
+            width: 100%;
+            height: 380px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(15, 11, 26, 0.9) 100%);
+            border: 1px solid var(--border-purple);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .work-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .work-preview-card:hover .work-preview-img {
+            transform: scale(1.03);
+        }
+
+        .work-info-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .work-number {
+            font-family: var(--font-mono);
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: rgba(168, 85, 247, 0.3);
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .work-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .work-desc {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .work-tools-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--purple-light);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .work-tools-list {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            font-family: var(--font-mono);
+        }
+
+        .work-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .work-btn {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid var(--purple-accent);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .work-btn:hover {
+            background: var(--purple-accent);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .work-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .work-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .work-carousel-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 25px;
+        }
+
+        .work-nav-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .work-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .work-dot.active {
+            background: var(--purple-accent);
+            width: 32px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px var(--purple-accent);
+        }
+
+        .work-nav-arrows {
+            display: flex;
+            gap: 16px;
+        }
+
+        .work-arrow-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-purple);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .work-arrow-btn:hover {
+            border-color: var(--purple-light);
+            background: rgba(168, 85, 247, 0.2);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
+        /* ==========================================================================
+           10. INTERNSHIP & CAREER SECTION
+           ========================================================================== */
+        #internship.internship-section {
+            min-height: 100vh;
+            padding: 120px 8% 120px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: #08060c;
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .internship-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .career-heading {
+            font-size: clamp(2.8rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            color: #e2e8f0;
+            margin-bottom: 70px;
+            letter-spacing: -1px;
+            text-align: center;
+        }
+
+        .career-heading .teal-text {
+            color: #5eead4;
+            display: block;
+            text-shadow: 0 0 25px rgba(94, 234, 212, 0.2);
+        }
+
+        .career-timeline-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            position: relative;
+        }
+
+        .career-row {
+            display: grid;
+            grid-template-columns: 2.2fr 1.2fr 3.5fr;
+            align-items: flex-start;
+            gap: 30px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .career-row:hover {
+            transform: translateX(6px);
+        }
+
+        .career-left {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .career-role {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+
+        .career-company {
+            font-size: 0.92rem;
+            color: #64748b;
+            font-family: var(--font-sans);
+            font-weight: 500;
+        }
+
+        .career-center {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding-left: 20px;
+        }
+
+        .career-center::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: -10px;
+            bottom: -30px;
+            width: 1px;
+            background: linear-gradient(180deg, rgba(94, 234, 212, 0.3) 0%, rgba(94, 234, 212, 0.05) 100%);
+        }
+
+        .career-time {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .career-time.highlight {
+            color: #f8fafc;
+        }
+
+        .career-right {
+            color: #94a3b8;
+            font-size: 0.98rem;
+            line-height: 1.65;
+            font-weight: 400;
+            padding-right: 20px;
+        }
+
+        .intern-action-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .intern-btn {
+            background: rgba(94, 234, 212, 0.1);
+            border: 1px solid rgba(94, 234, 212, 0.35);
+            color: #5eead4;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .intern-btn:hover {
+            background: #5eead4;
+            color: #08060c;
+            box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .intern-btn.website-btn {
+            background: rgba(168, 85, 247, 0.12);
+            border-color: rgba(168, 85, 247, 0.35);
+            color: var(--purple-light);
+        }
+
+        .intern-btn.website-btn:hover {
+            background: var(--purple-accent);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
+        /* ==========================================================================
+           11. CERTIFICATES SECTION
+           ========================================================================== */
+        #certificates.certificates-section {
+            min-height: 100vh;
+            padding: 120px 8% 120px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: rgba(7, 5, 11, 0.96);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .certs-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .certs-badge-top {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: #fff;
+            background: var(--purple-accent);
+            padding: 4px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+        }
+
+        .certs-main-title {
+            font-size: clamp(2.2rem, 3.5vw, 3rem);
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+        }
+
+        .certs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .cert-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-purple);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .cert-card:hover {
+            border-color: var(--purple-light);
+            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .cert-card.highlighted {
+            border: 2px solid var(--purple-accent);
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.35);
+        }
+
+        .cert-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .cert-icon-box {
+            width: 44px;
+            height: 44px;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid var(--purple-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple-light);
+        }
+
+        .verified-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #34d399;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .cert-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .cert-issuer {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--purple-light);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .cert-desc {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .cert-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 20px;
+        }
+
+        .cert-date {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .cert-view-btn {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid var(--purple-accent);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .cert-view-btn:hover {
+            background: var(--purple-accent);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================================================
+           12. CONTACT SECTION (MATCHING THEME STYLING)
+           ========================================================================== */
+        #contact.content-section-contact {
+            min-height: 100vh;
+            padding: 120px 8% 80px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: rgba(7, 5, 11, 0.92);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-purple);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(16px);
+        }
+
+        .glass-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid var(--purple-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple-light);
+            flex-shrink: 0;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-control.glass-input, 
+        textarea.glass-input {
+            background: rgba(15, 11, 26, 0.8);
+            border: 1px solid var(--border-purple);
+            border-radius: 8px;
+            padding: 14px 16px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: var(--font-sans);
+        }
+
+        .form-control.glass-input::placeholder, 
+        textarea.glass-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-control.glass-input:focus, 
+        textarea.glass-input:focus {
+            border-color: var(--purple-light);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+            background: rgba(15, 11, 26, 0.95);
+        }
+
+        textarea.glass-input {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--purple-accent) 0%, var(--purple-glow) 100%);
+            color: #fff;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+            font-family: var(--font-mono);
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.7);
+            color: #fff;
+        }
+
+        .custom-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #0f0b1a;
+            border: 1px solid var(--purple-accent);
+            padding: 36px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 380px;
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: #07050b;
+        }
+
+        /* ==========================================================================
+           RESPONSIVE BREAKPOINTS
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            header {
+                padding: 20px 24px;
+            }
+            .header-email { display: none; }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(10, 7, 18, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 32px;
+                transition: right 0.4s ease;
+                border-left: 1px solid var(--border-purple);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+                z-index: 102;
+            }
+            .nav-links.active {
+                right: 0;
+            }
+            .nav-links a {
+                font-size: 1rem;
+                letter-spacing: 3px;
+            }
+
+            .hero-section {
+                flex-direction: column;
+                justify-content: center;
+                padding: 130px 24px 50px 24px;
+                text-align: center;
+            }
+            .hero-left, .hero-right {
+                max-width: 100%;
+                margin: 0;
+            }
+            .hero-right { margin-top: 240px; }
+
+            .social-sidebar {
+                left: 20px;
+                gap: 20px;
+            }
+
+            #about.about-section-recreated,
+            #skills.techstack-section,
+            #education.content-section,
+            #work.projects-section,
+            #internship.internship-section,
+            #certificates.certificates-section,
+            #contact.content-section-contact {
+                padding: 100px 24px 60px 40px;
+            }
+
+            .about-container,
+            .work-slide,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .certs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .career-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .career-center::before {
+                display: none;
+            }
+            .career-center {
+                padding-left: 0;
+            }
+
+            .about-avatar-wrapper {
+                height: 380px;
+            }
+            .about-avatar-wrapper::before,
+            .about-photo {
+                width: 280px;
+                height: 280px;
+            }
+
+            .timeline-container::before { left: 20px; }
+            .timeline-dot { left: 20px; }
+            .timeline-item, .timeline-item:nth-child(odd) {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 45px;
+            }
+            .timeline-content, .timeline-visual-card {
+                width: 100%;
+            }
+            .timeline-visual-card {
+                margin-top: 16px;
+                height: 150px;
+            }
+            .resume-btn {
+                bottom: 20px;
+                right: 20px;
+                font-size: 0.75rem;
+                letter-spacing: 2px;
+            }
+        }
+    </style>
+    <!-- FontAwesome CDN for contact section icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Scroll Progress Indicator -->
-    <div id="scroll-progress"></div>
-
-    <!-- Cursor Glow Effect -->
-    <div id="cursor-glow"></div>
-
-    <!-- Particles Background -->
-    <div id="particles-js"></div>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top glass-nav">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-gradient" href="#hero">Pabitra Nayak</a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="fa-solid fa-bars text-light"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto text-center gap-lg-3">
-                    <li class="nav-item"><a class="nav-link active" href="#hero">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#experience">Experience & Education</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#certificates">Certificates</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                </ul>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="top-corner-mark top-left-mark">PN</div>
+        <div class="top-corner-mark top-right-mark">|||||</div>
+        
+        <div class="marquee-wrapper">
+            <div class="marquee-text">
+                COMPUTER SCIENCE STUDENT • SOFTWARE DEVELOPER • ODISHA, INDIA •
+            </div>
+            <div class="marquee-text">
+                COMPUTER SCIENCE STUDENT • SOFTWARE DEVELOPER • ODISHA, INDIA •
             </div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section id="hero" class="d-flex align-items-center min-vh-100 position-relative">
-        <div class="container">
-            <div class="row align-items-center gy-5">
-                <!-- Left Side: Text & Info -->
-                <div class="col-lg-7" data-aos="fade-right">
-                    <span class="badge glass-badge mb-3">
-                        <i class="fa-solid fa-circle text-success me-2"></i>Available for Hire
-                    </span>
-                    <h1 class="display-3 fw-bold text-light mb-3">
-                        Hi, I'm <span class="text-gradient">Pabitra</span>
-                    </h1>
-                    <h3 class="h2 text-secondary mb-4">I am a <span id="typed-text"></span></h3>
-                    <p class="lead text-muted mb-4 pe-lg-5">
-                        Passionate Computer Science Student & Full-Stack Developer specializing in building modern, scalable, and visually stunning web applications.
+        <div class="loader-pill">
+            <span>LOADING</span>
+            <div class="loader-pill-bar">
+                <div class="loader-pill-fill" id="loader-fill"></div>
+            </div>
+            <span id="loader-percent">0%</span>
+        </div>
+    </div>
+
+    <!-- PURPLE AMBIENT LIGHTING -->
+    <div class="purple-ambient-light"></div>
+    <div class="purple-orb" id="purple-orb"><div class="purple-orb-inner"></div></div>
+
+    <!-- FIXED 3D CHARACTER & DESK CANVAS -->
+    <canvas id="character-canvas"></canvas>
+
+    <!-- HEADER NAVIGATION -->
+    <header>
+        <a href="#about" class="logo">PN</a>
+        <a href="mailto:pabitranayak0017@gmail.com" class="header-email" aria-label="Email"></a>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#about" class="nav-item">ABOUT</a></li>
+            <li><a href="#skills" class="nav-item">TECHSTACK</a></li>
+            <li><a href="#education" class="nav-item">EDUCATION</a></li>
+            <li><a href="#work" class="nav-item">WORK</a></li>
+            <li><a href="#internship" class="nav-item">INTERNSHIP</a></li>
+            <li><a href="#certificates" class="nav-item">CERTIFICATES</a></li>
+            <li><a href="#contact" class="nav-item">CONTACT</a></li>
+        </ul>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- SOCIAL SIDEBAR -->
+    <aside class="social-sidebar">
+        <a href="https://github.com/pabitranayak0019-developer" target="_blank" class="social-icon" title="GitHub">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/pabitra-nayak-678482295?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="social-icon" title="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </a>
+        <a href="mailto:pabitranayak0017@gmail.com" class="social-icon" title="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        </a>
+        <a href="https://www.instagram.com/pabiitra.nayak?igsh=cmw0OHc4YWhxaHAz" target="_blank" class="social-icon" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+    </aside>
+
+    <!-- RESUME ACTION BUTTON -->
+    <a href="https://drive.google.com/file/d/1S65n-EWTboG6KVu--NOQM_KQX1tFeMzX/view?usp=sharing" class="resume-btn">
+        <span>RESUME</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+    </a>
+
+    <!-- MAIN BODY CONTENT -->
+    <main>
+        <!-- 1. HERO / HOME SECTION -->
+        <section id="hero" class="hero-section">
+            <div class="hero-left">
+                <div class="hero-greeting">Hello! I'm</div>
+                <h1 class="hero-name"><br>PABITRA NAYAK</h1>
+            </div>
+            <div class="hero-right">
+                <div class="hero-prefix">A dedicated</div>
+                <div class="hero-title-solid">
+                    <span id="typing-text"></span><span class="typing-cursor">&nbsp;</span>
+                </div>
+                <div class="hero-title-stacked">SOFTWARE DEVELOPER</div>
+            </div>
+        </section>
+
+        <!-- 2. ABOUT ME SECTION -->
+        <section id="about" class="about-section-recreated">
+            <div class="about-top-label">GET TO KNOW ME</div>
+            <h2 class="about-main-title">About Me</h2>
+            <div class="about-container">
+                <div class="about-avatar-wrapper" id="about-avatar-zone">
+                    <img src="assets/images/info.jpeg" alt="Pabitra Nayak" class="about-photo">
+                </div>
+                <div class="about-content-right">
+                    <h3>Architecting Digital Experiences</h3>
+                    <p class="about-description">
+                        I am a dedicated Computer Science Student & Software Developer with expertise in high-performance web development, responsive architectures, and interactive 3D interfaces.
                     </p>
-                    <div class="d-flex flex-wrap gap-3 mb-4">
-                        <a href="#contact" class="btn btn-gradient btn-lg">Hire Me <i class="fa-solid fa-arrow-right ms-2"></i></a>
-                        <a href="https://drive.google.com/file/d/1S65n-EWTboG6KVu--NOQM_KQX1tFeMzX/view?usp=sharing" class="btn btn-outline-glass btn-lg"><i class="fa-solid fa-download me-2"></i>Download CV</a>
+                    
+                    <div class="about-details-list">
+                        <div class="about-detail-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            <span>Name:</span> <strong>Pabitra Nayak</strong>
+                        </div>
+                        <div class="about-detail-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                            <span>Status:</span> <strong>Computer Science Student</strong>
+                        </div>
+                        <div class="about-detail-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            <span>Email:</span> <strong>pabitranayak0017@gmail.com</strong>
+                        </div>
+                        <div class="about-detail-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            <span>Location:</span> <strong>Odisha, India</strong>
+                        </div>
                     </div>
-                    <div class="d-flex gap-3 social-links">
-                        <a href="https://github.com/pabitranayak0019-developer" target="_blank" class="glass-icon"><i class="fa-brands fa-github"></i></a>
-                        <a href="https://x.com/23cs13244161" target="_blank" class="glass-icon"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://twitter.com/pabitranayak0019" target="_blank" class="glass-icon"><i class="fa-brands fa-x-twitter"></i></a>
-                        <a href="https://www.instagram.com/pabiitra.nayak?igsh=cmw0OHc4YWhxaHAz" target="_blank" class="glass-icon"><i class="fa-brands fa-instagram"></i></a>
-                    </div>
-                </div>
 
-                <!-- Right Side: 3D Photo Display -->
-                <div class="col-lg-5 text-center position-relative" data-aos="zoom-in">
-                    <div class="hero-3d-wrapper">
-                        <div class="glass-circle shape-1 floating"></div>
-                        <div class="glass-circle shape-2 floating-delayed"></div>
-                        <div class="hero-photo-frame js-tilt">
-                            <img src="assets/images/info.jpeg"
-                                 alt="Pabitra Nayak" 
-                                 class="img-fluid hero-profile-img floating"
-                                 onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600'">
+                    <div class="about-stats-grid">
+                        <div class="about-stat-box">
+                            <div class="about-stat-number">0+</div>
+                            <div class="about-stat-label">Years Experience</div>
+                        </div>
+                        <div class="about-stat-box">
+                            <div class="about-stat-number">4+</div>
+                            <div class="about-stat-label">Projects Completed</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-5 position-relative">
-        <div class="container py-5">
-            <div class="text-center mb-5" data-aos="fade-up">
-                <h6 class="text-gradient fw-bold text-uppercase">Get To Know Me</h6>
-                <h2 class="display-5 fw-bold text-light">About Me</h2>
+        <!-- 3. MY TECHSTACK 3D FLOATING & ORBITING BALLOON ORBS SECTION -->
+        <section id="skills" class="techstack-section">
+            <div class="techstack-title-wrapper">
+                <div class="about-top-label" style="text-align: center;">EXPERTISE & TOOLS</div>
+                <h2 class="techstack-main-title">MY TECHSTACK</h2>
             </div>
-            
-            <div class="row gy-4 align-items-center">
-                <div class="col-lg-5 text-center mb-4 mb-lg-0" data-aos="fade-right">
-                    <div class="d-inline-block position-relative">
-                        <div class="js-tilt" style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 30px rgba(0,242,254,0.2);">
-                            <img src="assets/images/me.jpeg" 
-                                 alt="Pabitra Nayak" 
-                                 style="width: 280px; height: 280px; object-fit: cover; border-radius: 50% !important; border: 3px solid #00f2fe; display: block;"
-                                 onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600'">
-                        </div>
-                    </div>
+
+            <!-- Floating & Orbiting 3D Balloons Field -->
+            <div class="tech-orbs-container" id="orbs-field">
+                <div class="orbit-ring orbit-ring-1"></div>
+                <div class="orbit-ring orbit-ring-2"></div>
+                <div class="orbit-ring orbit-ring-3"></div>
+
+                <div class="tech-orb" data-radius="160" data-speed="0.012" data-angle="0" data-yoffset="-30" style="width: 110px; height: 110px; background: radial-gradient(circle at 30% 30%, #c084fc, #7e22ce);">
+                    HTML5/CSS3
                 </div>
-
-                <div class="col-lg-7" data-aos="fade-left">
-                    <div class="glass-card p-4 p-md-5">
-                        <h3 class="text-light mb-3">Architecting Digital Experiences</h3>
-                        <p class="text-muted mb-4">
-                            I am a dedicated Computer Science Student & Software Developer with expertise in high-performance web development, responsive architectures, and interactive 3D interfaces.
-                        </p>
-                        
-                        <ul class="list-unstyled mb-4 d-flex flex-column gap-3">
-                            <li class="d-flex align-items-center">
-                                <i class="fa-solid fa-user text-gradient me-3 fs-5"></i>
-                                <strong class="me-2 text-light">Name:</strong> Pabitra Nayak
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <i class="fa-solid fa-graduation-cap text-gradient me-3 fs-5"></i>
-                                <strong class="me-2 text-light">Status:</strong> Computer Science Student
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <i class="fa-solid fa-envelope text-gradient me-3 fs-5"></i>
-                                <strong class="me-2 text-light">Email:</strong> pabitranayak0017@gmail.com
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <i class="fa-solid fa-location-dot text-gradient me-3 fs-5"></i>
-                                <strong class="me-2 text-light">Location:</strong> Odisha, India
-                            </li>
-                        </ul>
-
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <div class="p-3 glass-inner rounded text-center">
-                                    <h4 class="text-gradient mb-0"><span class="counter" data-target="3">0</span>+</h4>
-                                    <small class="text-muted">Years Experience</small>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-3 glass-inner rounded text-center">
-                                    <h4 class="text-gradient mb-0"><span class="counter" data-target="25">4</span>+</h4>
-                                    <small class="text-muted">Projects Completed</small>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="tech-orb" data-radius="290" data-speed="-0.009" data-angle="1.2" data-yoffset="20" style="width: 125px; height: 125px; background: radial-gradient(circle at 30% 30%, #60a5fa, #1d4ed8);">
+                    React.js
+                </div>
+                <div class="tech-orb" data-radius="410" data-speed="0.007" data-angle="2.5" data-yoffset="-10" style="width: 115px; height: 115px; background: radial-gradient(circle at 30% 30%, #f472b6, #db2777);">
+                    JavaScript
+                </div>
+                <div class="tech-orb" data-radius="160" data-speed="0.012" data-angle="3.14" data-yoffset="40" style="width: 100px; height: 100px; background: radial-gradient(circle at 30% 30%, #818cf8, #4338ca);">
+                    Java
+                </div>
+                <div class="tech-orb" data-radius="290" data-speed="-0.009" data-angle="4.3" data-yoffset="-40" style="width: 115px; height: 115px; background: radial-gradient(circle at 30% 30%, #facc15, #ca8a04); color: #0f172a;">
+                    Python
+                </div>
+                <div class="tech-orb" data-radius="410" data-speed="0.007" data-angle="5.5" data-yoffset="30" style="width: 110px; height: 110px; background: radial-gradient(circle at 30% 30%, #34d399, #059669);">
+                    Power BI
+                </div>
+                <div class="tech-orb" data-radius="290" data-speed="-0.009" data-angle="2.8" data-yoffset="10" style="width: 100px; height: 100px; background: radial-gradient(circle at 30% 30%, #22d3ee, #0891b2); color: #0f172a;">
+                    SQL / NoSQL
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="py-5 position-relative">
-        <div class="container py-5">
-            <div class="text-center mb-5" data-aos="fade-up">
-                <h6 class="text-gradient fw-bold text-uppercase">Technical Proficiency</h6>
-                <h2 class="display-5 fw-bold text-light">Skills & Expertise</h2>
+            <!-- Categorized Skills Cards Below -->
+            <div class="tech-categories-grid">
+                <div class="tech-category-box">
+                    <h4>Frontend Development</h4>
+                    <ul>
+                        <li>HTML5</li>
+                        <li>CSS3</li>
+                        <li>JavaScript</li>
+                        <li>Bootstrap</li>
+                        <li>React</li>
+                    </ul>
+                </div>
+                <div class="tech-category-box">
+                    <h4>Programming</h4>
+                    <ul>
+                        <li>JavaScript (ES6+)</li>
+                        <li>Python</li>
+                        <li>Java</li>
+                    </ul>
+                </div>
+                <div class="tech-category-box">
+                    <h4>Databases</h4>
+                    <ul>
+                        <li>MySQL</li>
+                        <li>MongoDB</li>
+                        <li>PostgreSQL</li>
+                    </ul>
+                </div>
+                <div class="tech-category-box">
+                    <h4>Tools & Deployment</h4>
+                    <ul>
+                        <li>Git & GitHub</li>
+                        <li>VS Code</li>
+                        <li>Vercel</li>
+                        <li>Figma</li>
+                    </ul>
+                </div>
+                <div class="tech-category-box">
+                    <h4>Data Analytics</h4>
+                    <ul>
+                        <li>Power BI</li>
+                        <li>Advanced Excel</li>
+                        <li>SQL Analytics</li>
+                        <li>Python (Pandas/NumPy)</li>
+                    </ul>
+                </div>
             </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="glass-card skill-card p-4 text-center js-tilt">
-                        <div class="skill-icon mb-3"><i class="fa-brands fa-html5"></i></div>
-                        <h4 class="text-light h5">Frontend Development</h4>
-                        <p class="small text-muted mb-0">HTML5, CSS3, JavaScript, Bootstrap, React</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="glass-card skill-card p-4 text-center js-tilt">
-                        <div class="skill-icon mb-3"><i class="fa-solid fa-code"></i></div>
-                        <h4 class="text-light h5">Programming</h4>
-                        <p class="small text-muted mb-0">JavaScript (ES6+), C++, Python, Java</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="glass-card skill-card p-4 text-center js-tilt">
-                        <div class="skill-icon mb-3"><i class="fa-solid fa-database"></i></div>
-                        <h4 class="text-light h5">Databases</h4>
-                        <p class="small text-muted mb-0">MySQL, MongoDB, PostgreSQL</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="400">
-                    <div class="glass-card skill-card p-4 text-center js-tilt">
-                        <div class="skill-icon mb-3"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-                        <h4 class="text-light h5">Tools & Deployment</h4>
-                        <p class="small text-muted mb-0">Git, GitHub, VS Code, Vercel, Figma</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Projects Section -->
+        <!-- 4. EDUCATION SECTION -->
+        <section id="education" class="content-section">
+            <h2 class="section-header"><span>//</span> EDUCATION TIMELINE</h2>
+            <div class="timeline-container">
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">PRESENT</div>
+                        <h3 class="timeline-title">Bachelor of Technology (CSE)</h3>
+                        <div class="timeline-subtitle">SRINIX COLLEGE OF ENGINEERING, BALASORE, ODISHA</div>
+                        <p class="timeline-desc">Focused on Data Structures, Web Engineering, and Software Engineering.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-visual-card">
+                        <div class="holo-badge">B.TECH (CSE)</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2021 - 2024</div>
+                        <h3 class="timeline-title">Diploma (CSE)</h3>
+                        <div class="timeline-subtitle">BALASORE SCHOOL OF ENGINEERING, BALASORE, ODISHA</div>
+                        <p class="timeline-desc">Gained strong fundamentals in computer science & software concepts.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-visual-card">
+                        <div class="holo-badge">DIPLOMA (CSE)</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2021</div>
+                        <h3 class="timeline-title">10th</h3>
+                        <div class="timeline-subtitle">SRI SATYA SAI VIDYA VIHAR, BALASORE, ODISHA</div>
+                        <p class="timeline-desc">Completed secondary education with strong science focus.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-visual-card">
+                        <div class="holo-badge">SECONDARY</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. MY WORK / PROJECTS SECTION -->
 
         <!-- Projects 1 -->
-
-    <div id="projects" class="py-5 position-relative">
-        <div class="container py-5">
-            <div class="text-center mb-5" data-aos="fade-up">
-                <h6 class="text-gradient fw-bold text-uppercase">Featured Works</h6>
-                <h2 class="display-5 fw-bold text-light">Recent Projects</h2>
-            </div>
+        <section id="work" class="projects-section">
+            <h2 class="section-header"><span>//</span> MY WORK</h2>
             
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
-                        <div>
-                            <img src="assets/images/shop.png" class="img-fluid project-img w-100" alt="Mini Amazon E-Commerce" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
-                            <div class="p-4 pb-0">
-                                <h4 class="text-light h5 mb-2">Mini Amazon E-Commerce</h4>
-                                <p class="text-muted small mb-3">Modern online shopping portal featuring tech deals, product categories, and dynamic cart UI.</p>
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <span class="badge glass-badge">HTML5</span>
-                                    <span class="badge glass-badge">Bootstrap 5</span>
-                                    <span class="badge glass-badge">CSS</span>
-                                    <span class="badge glass-badge">JavaScript</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 pt-0">
-                            <div class="d-flex gap-2">
-                                <a href="https://mini-amazon-shop.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
-                                <a href="https://github.com/pabitranayak0019-developer/Mini-Amazon-Shop.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
-                            </div>
+            <div class="work-carousel-container">
+                <div class="work-slide active" data-index="0">
+                    <div class="work-preview-card">
+                        <img src="assets/images/shop.png" alt="Project 1" class="work-preview-img">
+                    </div>
+                    <div class="work-info-content">
+                        <div class="work-number">01</div>
+                        <h3 class="work-title">Mini Amazon E-Commerce</h3>
+                        <p class="work-desc">Modern online shopping portal featuring tech deals, product categories, and dynamic cart UI.</p>
+                        <div class="work-tools-label">TOOLS & FEATURES</div>
+                        <div class="work-tools-list">HTML5, CSS3, JavaScript (ES6+), Bootstrap 5</div>
+                        <div class="work-actions">
+                            <a href="https://github.com/pabitranayak0019-developer/Mini-Amazon-Shop.git" target="_blank" class="work-btn secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                                GITHUB
+                            </a>
+                            <a href="https://mini-amazon-shop.vercel.app/" target="_blank" class="work-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                LIVE PREVIEW
+                            </a>
                         </div>
                     </div>
                 </div>
-                
-                    <!-- Project 2 -->
 
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
-                        <div>
-                           <img src="assets/images/img.png" class="img-fluid project-img w-100" alt="Text-To-Image AI Generator" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
-                            <div class="p-4 pb-0">
-                                <h4 class="text-light h5 mb-2">Text-To-Image AI Generator</h4>
-                                <p class="text-muted small mb-3">AI Image Generator transforming creative ideas into visually stunning images using AI APIs.</p>
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <span class="badge glass-badge">HTML</span>
-                                    <span class="badge glass-badge">Bootstrap 5</span>
-                                    <span class="badge glass-badge">CSS</span>
-                                    <span class="badge glass-badge">JavaScript</span>
-                                     <span class="badge glass-badge">API</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 pt-0">
-                            <div class="d-flex gap-2">
-                                <a href="https://text-to-image-livid.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
-                                <a href="https://github.com/pabitranayak0019-developer/TEXT_TO_IMAGE.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
-                            </div>
+                <!-- Projects 2 -->
+
+                <div class="work-slide" data-index="1">
+                    <div class="work-preview-card">
+                        <img src="assets/images/ALL.png" alt="Project 2" class="work-preview-img">
+                    </div>
+                    <div class="work-info-content">
+                        <div class="work-number">02</div>
+                        <h3 class="work-title">ALL-IN-ONE-TOOL</h3>
+                        <p class="work-desc">All-in-One Student Tools platform offering multiple utility features in one place.</p>
+                        <div class="work-tools-label">TOOLS & FEATURES</div>
+                        <div class="work-tools-list">HTML5, CSS3, Bootstrap 5, JavaScript(ES6+), React, Web APIs</div>
+                        <div class="work-actions">
+                            <a href="https://github.com/suzenkumar/All-in-one-Tool-Group-Project-.git" target="_blank" class="work-btn secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                                GITHUB
+                            </a>
+                            <a href="https://all-in-one-ai-tools-nine.vercel.app/" target="_blank" class="work-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                LIVE PREVIEW
+                            </a>
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Project 3 -->
 
-
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
-                        <div>
-                           <img src="assets/images/ALL.png" class="img-fluid project-img w-100" alt="ALL-IN-ONE-TOOL" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
-                            <div class="p-4 pb-0">
-                                <h4 class="text-light h5 mb-2">ALL-IN-ONE-TOOL</h4>
-                                <p class="text-muted small mb-3">All-in-One Student Tools platform offering multiple utility features in one place.</p>
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <span class="badge glass-badge">HTML5</span>
-                                   <span class="badge glass-badge">CSS3</span>
-                                    <span class="badge glass-badge">Bootstrap 5</span>
-                                    <span class="badge glass-badge">JavaScript(ES6+)</span>
-                                    <span class="badge glass-badge">React</span>
-                                    <span class="badge glass-badge">Web APIs</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 pt-0">
-                            <div class="d-flex gap-2">
-                                <a href="https://all-in-one-ai-tools-nine.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
-                                <a href="https://github.com/suzenkumar/All-in-one-Tool-Group-Project-.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
-                            </div>
+                <div class="work-slide" data-index="2">
+                    <div class="work-preview-card">
+                        <img src="assets/images/study.png" alt="Project 3" class="work-preview-img">
+                    </div>
+                    <div class="work-info-content">
+                        <div class="work-number">03</div>
+                        <h3 class="work-title">Study-Lens-Ai</h3>
+                        <p class="work-desc">AI PDF Q&A is an AI-powered study assistant that allows students to upload PDFs, ask questions, and get answers directly from the document. It helps students quickly understand topics, summaries, and exam-important questions.</p>
+                        <div class="work-tools-label">TOOLS & FEATURES</div>
+                        <div class="work-tools-list">HTML5, CSS3, JavaScript(vanilla JS), APIs</div>
+                        <div class="work-actions">
+                            <a href="https://github.com/pabitranayak0019-developer/STUDY_LENS_AI_TOOL.git" target="_blank" class="work-btn secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                                GITHUB
+                            </a>
+                            <a href="https://study-lens-ai-tool-55d7.vercel.app/" target="_blank" class="work-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                LIVE PREVIEW
+                            </a>
                         </div>
                     </div>
                 </div>
 
-             <!-- Project 4 -->
+                 <!-- Projects 4 -->
 
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
-                        <div>
-                           <img src="assets/images/study.png" class="img-fluid project-img w-100" alt="Text-To-Image AI Generator" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
-                            <div class="p-4 pb-0">
-                                <h4 class="text-light h5 mb-2">Study-Lens-Ai</h4>
-                                <p class="text-muted small mb-3">AI PDF Q&A is an AI-powered study assistant that allows students to upload PDFs, ask questions, and get answers directly from the document. It helps students quickly understand topics, summaries, and exam-important questions.</p>
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <span class="badge glass-badge">HTML5</span>
-                                    <span class="badge glass-badge">CSS3</span>
-                                    <span class="badge glass-badge">JavaScript(vanilla JS)</span>
-                                    <span class="badge glass-badge">API</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 pt-0">
-                            <div class="d-flex gap-2">
-                                <a href="https://study-lens-ai-tool-55d7.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
-                                <a href="https://github.com/pabitranayak0019-developer/STUDY_LENS_AI_TOOL.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
-                            </div>
+                <div class="work-slide" data-index="3">
+                    <div class="work-preview-card">
+                        <img src="assets/images/HRMS.png" alt="Project 4" class="work-preview-img">
+                    </div>
+                    <div class="work-info-content">
+                        <div class="work-number">04</div>
+                        <h3 class="work-title">Corporate Employee Management Portal (HRMS)</h3>
+                        <p class="work-desc">Corporate Employee Management Portal (HRMS) is a full-stack web application designed to centralize employee and HR operations such as attendance, leave management, payroll, digital ID cards, documents, announcements, and role-based access.</p>
+                        <div class="work-tools-label">TOOLS & FEATURES</div>
+                        <div class="work-tools-list">HTML5, CSS3, Bootstrap 5, JavaScript(ES6+), React, Web APIs, Node, MongoDB, JWT+Bcrypt</div>
+                        <div class="work-actions">
+                            <a href="https://github.com/pabitranayak0019-developer/HRMS_Project.git" target="_blank" class="work-btn secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                                GITHUB
+                            </a>
+                            <a href="https://lnkd.in/p/dyXtYtPE" target="_blank" class="work-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                LIVE PREVIEW
+                            </a>
                         </div>
                     </div>
                 </div>
 
-            <!-- Project 5 -->
 
+                <!-- Projects 5 -->
 
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
-                        <div>
-                           <img src="assets/images/CV.png" class="img-fluid project-img w-100" alt="RESUME BUILDER" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
-                            <div class="p-4 pb-0">
-                                <h4 class="text-light h5 mb-2">RESUME BUILDER</h4>
-                                <p class="text-muted small mb-3">Resume Builder is a user-friendly web application designed to help students and job seekers create professional resumes easily. Users can enter their personal details, education, skills, projects, and experience, customize the resume layout, and generate a ready-to-use resume for job applications.</p>
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <span class="badge glass-badge">HTML</span>
-                                    <span class="badge glass-badge">JavaScript</span>
-                                    <span class="badge glass-badge">CSS3</span>
-                                    <span class="badge glass-badge">API</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 pt-0">
-                            <div class="d-flex gap-2">
-                                <a href="https://resume-bulider-student.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
-                                <a href="https://github.com/pabitranayak0019-developer/RESUME-BULIDER.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
-                            </div>
-                        </div>
+                <div class="work-slide" data-index="4">
+                    <div class="work-preview-card">
+                        <img src="assets/images/CV.png" alt="Project 5" class="work-preview-img">
                     </div>
-                </div>
-                
-             <!-- Project 6 -->
-
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="glass-card project-card h-100 overflow-hidden js-tilt d-flex flex-column justify-content-between">
-                        <div>
-                           <img src="assets/images/HRMS.png" class="img-fluid project-img w-100" alt="Corporate Employee Management Portal (HRMS)" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
-                            <div class="p-4 pb-0">
-                                <h4 class="text-light h5 mb-2">Corporate Employee Management Portal (HRMS)</h4>
-                                <p class="text-muted small mb-3">Corporate Employee Management Portal (HRMS) is a full-stack web application designed to centralize employee and HR operations such as attendance, leave management, payroll, digital ID cards, documents, announcements, and role-based access.</p>
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <span class="badge glass-badge">HTML5</span>
-                                    <span class="badge glass-badge">CSS3</span>
-                                    <span class="badge glass-badge">JavaScript</span>
-                                    <span class="badge glass-badge">React</span>
-                                    <span class="badge glass-badge">Node</span>
-                                    <span class="badge glass-badge">MongoDB</span>
-                                    <span class="badge glass-badge">JWT+Bcrypt</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 pt-0">
-                            <div class="d-flex gap-2">
-                                <a href="https://lnkd.in/p/dyXtYtPE" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-gradient w-100">Live Demo</a>
-                                <a href="https://github.com/pabitranayak0019-developer/HRMS_Project.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glass"><i class="fa-brands fa-github"></i></a>
-                            </div>
+                    <div class="work-info-content">
+                        <div class="work-number">05</div>
+                        <h3 class="work-title">RESUME BUILDER</h3>
+                        <p class="work-desc">Resume Builder is a user-friendly web application designed to help students and job seekers create professional resumes easily. Users can enter their personal details, education, skills, projects, and experience, customize the resume layout, and generate a ready-to-use resume for job applications.</p>
+                        <div class="work-tools-label">TOOLS & FEATURES</div>
+                        <div class="work-tools-list">HTML5, CSS3, Bootstrap 5, JavaScript, Web APIs</div>
+                        <div class="work-actions">
+                            <a href="https://github.com/pabitranayak0019-developer/RESUME-BULIDER.git" target="_blank" class="work-btn secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                                GITHUB
+                            </a>
+                            <a href="https://resume-bulider-student.vercel.app/" target="_blank" class="work-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                LIVE PREVIEW
+                            </a>
                         </div>
                     </div>
                 </div>
 
+                <div class="work-carousel-nav">
+                    <div class="work-nav-dots" id="work-nav-dots">
+                        <span class="work-dot active" onclick="currentWorkSlide(0)"></span>
+                        <span class="work-dot" onclick="currentWorkSlide(1)"></span>
+                        <span class="work-dot" onclick="currentWorkSlide(2)"></span>
+                    </div>
+                    <div class="work-nav-arrows">
+                        <button class="work-arrow-btn" id="work-prev" aria-label="Previous">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <button class="work-arrow-btn" id="work-next" aria-label="Next">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-   <!-- Experience & Education Section -->
-<section id="experience" class="py-5 position-relative">
-    <div class="container py-5">
-        
-        <!-- Section Header -->
-        <div class="text-center mb-5" data-aos="fade-up">
-            <h6 class="text-gradient fw-bold text-uppercase">Journey</h6>
-            <h2 class="display-5 fw-bold text-light">Experience & Education</h2>
-        </div>
+        <!-- 6. INTERNSHIP & CAREER SECTION -->
+        <section id="internship" class="internship-section">
+            <div class="internship-container">
+                <h2 class="career-heading">
+                    My career &<br>
+                    <span class="teal-text"> Internship Experience</span>
+                </h2>
 
-        <div class="row g-4">
-            <!-- Experience Column -->
-            <div class="col-lg-6" data-aos="fade-right">
-                <h3 class="text-light mb-4">
-                    <i class="fa-solid fa-briefcase text-gradient me-2"></i>Experience
-                </h3>
-                <div class="timeline position-relative ps-4">
+                <div class="career-timeline-grid">
+                    <!-- Row 1: GenLearny Internship -->
+                    <div class="career-row">
+                        <div class="career-left">
+                            <div class="career-role">Web Development Trainee</div>
+                            <div class="career-company">GenLearny</div>
+                            <span class="badge glass-badge">JUNE - AUG</span>
+                        </div>
+                        <div class="career-center">
+                            <div class="career-time highlight">2026</div>
                     
-                    <!-- Experience 1 -->
-                    <div class="glass-card p-4 mb-4 timeline-item js-tilt">
-                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
-                            <span class="badge glass-badge">JUNE 2026 - AUG 2026</span>
-                            <a href="https://genlearny.com/" target="_blank" rel="noopener noreferrer" class="link-btn">
-                                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Visit Site
-                            </a>
                         </div>
-                        <h5 class="text-light mb-1">GenLearny(Fullstack Web Development)Intern</h5>
-                        <p class="text-gradient mb-2 fw-semibold">
-                            <a href="https://drive.google.com/file/d/1OCdRzw-FAwjgU_08BR0Rk51e78kSuk01/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="company-link text-decoration-none text-gradient">
-                                CERTIFICATE <i class="fa-solid fa-link ms-1 small"></i>
-                            </a>
-                        </p>
-                        <p class="small text-muted mb-0">Completed 3 months of Web Development training, gaining hands-on experience in frontend and backend concepts while building practical web projects.</p>
-                    </div>
-
-                    <!-- Experience 2 -->
-                    <div class="glass-card p-4 mb-4 timeline-item js-tilt">
-                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
-                            <span class="badge glass-badge">JUNE 2026 - JULY 2026</span>
-                            <a href="https://www.drdo.gov.in/drdo/" target="_blank" rel="noopener noreferrer" class="link-btn">
-                                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Visit Site
-                            </a>
-                        </div>
-                        <h5 class="text-light mb-1">DRDO, ITR(MET) INTERN</h5>
-                        <p class="text-gradient mb-2 fw-semibold">
-                            <a href="https://drive.google.com/file/d/1q1WWhlfxm2D0MCO5QIJYFyCp6PMDjyhp/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="company-link text-decoration-none text-gradient">
-                                CERTIFICATE <i class="fa-solid fa-link ms-1 small"></i>
-                            </a>
-                        </p>
-                        <p class="small text-muted mb-0">Completed technical internship at DRDO, Integrated Test Range (ITR), Chandipur.</p>
-                    </div>
-
-                    <!-- Experience 3 -->
-                    <div class="glass-card p-4 timeline-item js-tilt">
-                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
-                            <span class="badge glass-badge">AUG 2022 - SEP 2022</span>
-                            <a href="https://eduwebsoft.co.in/" target="_blank" rel="noopener noreferrer" class="link-btn">
-                                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Visit Site
-                            </a>
-                        </div>
-                        <h5 class="text-light mb-1">Web Development Intern</h5>
-                        <p class="text-gradient mb-2 fw-semibold">
-                            <a href="https://drive.google.com/file/d/1fIgkYExJUi7HKpvnkhpD34-DElp7xg4x/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="company-link text-decoration-none text-gradient">
-                                Creative Digital Agency <i class="fa-solid fa-link ms-1 small"></i>
-                            </a>
-                        </p>
-                        <p class="small text-muted mb-0">Worked on cross-browser UI modules, dynamic form validations, and responsiveness.</p>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Education Column -->
-            <div class="col-lg-6" data-aos="fade-left">
-                <h3 class="text-light mb-4">
-                    <i class="fa-solid fa-graduation-cap text-gradient me-2"></i>Education
-                </h3>
-                <div class="timeline position-relative ps-4">
-                    
-                    <!-- Education 1 -->
-                    <div class="glass-card p-4 mb-4 timeline-item js-tilt">
-                        <span class="badge glass-badge mb-2">Present</span>
-                        <h5 class="text-light mb-1">Bachelor of Technology (CSE)</h5>
-                        <p class="text-gradient mb-2 fw-semibold">Srinix College Of Engineering, Balasore, Odisha</p>
-                        <p class="small text-muted mb-0">Focused on Data Structures, Web Engineering, and Software Engineering.</p>
-                    </div>
-
-                    <!-- Education 2 -->
-                    <div class="glass-card p-4 mb-4 timeline-item js-tilt">
-                        <span class="badge glass-badge mb-2">2021 - 2024</span>
-                        <h5 class="text-light mb-1">Diploma (CSE)</h5>
-                        <p class="text-gradient mb-2 fw-semibold">Balasore School Of Engineering, Balasore, Odisha</p>
-                        <p class="small text-muted mb-0">Gained strong fundamentals in computer science & software concepts.</p>
-                    </div>
-
-                    <!-- Education 3 -->
-                    <div class="glass-card p-4 timeline-item js-tilt">
-                        <span class="badge glass-badge mb-2">2021</span>
-                        <h5 class="text-light mb-1">10th</h5>
-                        <p class="text-gradient mb-2 fw-semibold">Sri Satya Sai Vidya Vihar, Balasore, Odisha</p>
-                        <p class="small text-muted mb-0">Completed secondary education with strong science focus.</p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-    
-
-    <!-- Certificates Section -->
-<section id="certificates" class="py-5 position-relative">
-    <div class="container py-5">
-        <div class="text-center mb-5" data-aos="fade-up">
-            <h6 class="text-gradient fw-bold text-uppercase">Achievements</h6>
-            <h2 class="display-5 fw-bold text-light">My Certificates</h2>
-        </div>
-        
-        <div class="row g-4">
-            <!-- Certificate 1 -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-certificate text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">Introduction to Generative AI Studio</h4>
-                        <p class="text-gradient mb-2 fw-semibold">Google Cloud/ Simplilearn</p>
-                        <p class="small text-muted mb-3">Introduction to Generative AI Studio explores Generative AI, prompt engineering, AI models, and responsible AI practices.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: March-2026</small>
-                        <a href="https://drive.google.com/file/d/1gmqa1PSgCsV7oQsDxMTAkv5Q9Llk1aJJ/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
+                        <div class="career-right">
+                            Completed a technical internship at GenLearny, a leading edtech company. Worked with modern web development technologies and real-time operational workflows. Engaged in intensive 3-month full-stack web development program. Developed robust web applications utilizing HTML5, CSS3, JavaScript ES6+, dynamic backends, and cloud API integrations.
 
 
-               <!-- Certificate 2 -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-certificate text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">Introduction to UX Design</h4>
-                        <p class="text-gradient mb-2 fw-semibold">IBM SkillsBuild</p>
-                        <p class="small text-muted mb-3">User Experience Principles, Information Architecture, Usability Testing & Accessibility</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: August 2026</small>
-                        <a href="https://drive.google.com/file/d/1Cbu-3hya--s2IDufd-bEO5_Np0jPRdnk/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Certificate 3 -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-award text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">PowerBI Workshop</h4>
-                        <p class="text-gradient mb-2 fw-semibold">OfficeMaster</p>
-                        <p class="small text-muted mb-3">Gained practical knowledge of data visualization, dashboard creation, data analysis, and reporting using Microsoft Power BI.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: Jan-2026</small>
-                        <a href="https://drive.google.com/file/d/1E9YHzXydDqIEgs9dJwGbS_a_tecxDtXz/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Certificate 4 -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-laptop-code text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">JAVASCRIPT COURSE</h4>
-                        <p class="text-gradient mb-2 fw-semibold">STP COMPUTER EDUCATION</p>
-                        <p class="small text-muted mb-3">Completed a 3-month JavaScript course covering fundamentals, programming concepts, and web development.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: November-2023</small>
-                        <a href="https://drive.google.com/file/d/17WwU380jESkOMj6-VZZGzwTAvcejBXR8/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-             <!-- Certificate 5 -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-award text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">CSS COURSE</h4>
-                        <p class="text-gradient mb-2 fw-semibold">STP COMPUTER EDUCATION</p>
-                        <p class="small text-muted mb-3">Successfully completed a CSS course gaining practical knowledge of responsive web design, layouts, and styling.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: Aug-2023</small>
-                        <a href="https://drive.google.com/file/d/10jOHJc7pPS3XeIhX2KV3nEhJ4czpnmah/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-              <!-- Certificate 6 -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-award text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">Web Development Course</h4>
-                        <p class="text-gradient mb-2 fw-semibold">GENLEARNY</p>
-                        <p class="small text-muted mb-3">Successfully completed professional training in Web Development at GenLearny gaining practical knowledge.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: July-2026</small>
-                        <a href="https://drive.google.com/file/d/1QxKq-DzLf9bfGQ9B7ufWKJ9tokIaeCBl/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-              <!-- Certificate 7  -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-award text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">Bootcamp: RTL, IP Integration, and SoC Signoff</h4>
-                        <p class="text-gradient mb-2 fw-semibold">NIELIT</p>
-                        <p class="small text-muted mb-3">Completed 90-hour course on RTL design, IP integration, and SoC signoff processes.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: Jan-2026</small>
-                        <a href="https://drive.google.com/file/d/1zxsrHTCaweCBrcjEl2apmRxMI5F7u-F9/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-              <!-- Certificate 8  -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-award text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">Introduction to Gemini for Google Workspace</h4>
-                        <p class="text-gradient mb-2 fw-semibold">Google Cloud/Coursera</p>
-                        <p class="small text-muted mb-3">Gained foundational knowledge of generative AI tools to enhance productivity across Workspace apps.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: Nov-2025</small>
-                        <a href="https://drive.google.com/file/d/1KePoUKeypf_6eAsTqv8GIHz4aXW5TUkG/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-              <!-- Certificate 9 -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-certificate text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">Microsoft PowerPoint</h4>
-                        <p class="text-gradient mb-2 fw-semibold">Coursera</p>
-                        <p class="small text-muted mb-3">Completed project on creating, formatting, designing, and presenting professional PowerPoint decks.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: Nov-2025</small>
-                        <a href="https://drive.google.com/file/d/1go9Aaq0Adcbln7tKHddgNn9RONOqwaT2/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-              <!-- Certificate 10 -->
-            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
-                <div class="glass-card cert-card h-100 p-4 js-tilt d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="cert-icon">
-                                <i class="fa-solid fa-laptop-code text-gradient fs-2"></i>
-                            </div>
-                            <span class="badge glass-badge"><i class="fa-solid fa-circle-check text-success me-1"></i> Verified</span>
-                        </div>
-                        <h4 class="text-light h5 mb-2">Technology Job Simulation</h4>
-                        <p class="text-gradient mb-2 fw-semibold">Deloitte</p>
-                        <p class="small text-muted mb-3">Completed practical tasks in coding and development, gaining hands-on software development experience.</p>
-                    </div>
-                    <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Issued: Jan 17 -2026</small>
-                        <a href="https://drive.google.com/file/d/15yAFWjBuPJoEEdZTYp0l-w-Swn9N7g1K/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div> <!-- Row end -->
-    </div> <!-- Container end -->
-</section>
-    <!-- Contact Section -->
-    <section id="contact" class="py-5 position-relative">
-        <div class="container py-5">
-            <div class="text-center mb-5" data-aos="fade-up">
-                <h6 class="text-gradient fw-bold text-uppercase">Get In Touch</h6>
-                <h2 class="display-5 fw-bold text-light">Contact Me</h2>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-5" data-aos="fade-right">
-                    <div class="glass-card p-4 p-md-5 h-100">
-                        <h4 class="text-light mb-4">Let's Connect</h4>
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="glass-icon me-3"><i class="fa-solid fa-location-dot"></i></div>
-                            <div>
-                                <h6 class="text-light mb-0">Location</h6>
-                                <small class="text-muted">Balasore, Odisha, India</small>
+                            <div class="intern-action-btns">
+                                <a href="https://drive.google.com/file/d/1OCdRzw-FAwjgU_08BR0Rk51e78kSuk01/view?usp=drive_link" target="_blank" class="intern-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                    View Certificate
+                                </a>
+                                <a href="https://genlearny.com/" target="_blank" class="intern-btn website-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                    View Website
+                                </a>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="glass-icon me-3"><i class="fa-solid fa-envelope"></i></div>
-                            <div>
-                                <h6 class="text-light mb-0">Email</h6>
-                                <small class="text-muted">pabitranayak0017@gmail.com</small>
+                    </div>
+
+                    <!-- Row 2: DRDO Training/Internship -->
+                    <div class="career-row">
+                        <div class="career-left">
+                            <div class="career-role">Technical Intern</div>
+                            <div class="career-company">DRDO, ITR(MET) INTERN</div>
+                            <span class="badge glass-badge">JUNE - JULY</span>
+                        </div>
+                        <div class="career-center">
+                            <div class="career-time">2026</div>
+                        </div>
+                        <div class="career-right">
+                            Completed technical internship at DRDO, Integrated Test Range (ITR), Chandipur. Completed a technical internship at Defense Research and Development Organisation (DRDO), Integrated Test Range (ITR). Worked with defense technology software systems and real-time operational workflows
+                            <div class="intern-action-btns">
+                                <a href="https://drive.google.com/file/d/1q1WWhlfxm2D0MCO5QIJYFyCp6PMDjyhp/view?usp=drive_link" target="_blank" class="intern-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                    View Certificate
+                                </a>
+                                <a href="https://www.drdo.gov.in/drdo/" target="_blank" class="intern-btn website-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                    View Website
+                                </a>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <div class="glass-icon me-3"><i class="fa-solid fa-phone"></i></div>
-                            <div>
-                                <h6 class="text-light mb-0">Phone</h6>
-                                <small class="text-muted">+91 6371258564</small>
+                    </div>
+
+                    <!-- Row 3: Eduwebsoft Internship -->
+                    <div class="career-row">
+                        <div class="career-left">
+                            <div class="career-role">Web Development Intern</div>
+                            <div class="career-company">Eduwebsoft • Odisha, India</div>
+                            <span class="badge glass-badge">AUG - SEP</span>
+                        </div>
+                        <div class="career-center">
+                            <div class="career-time">2022</div>
+                        </div>
+                        <div class="career-right">
+                            Focused on cross-browser UI modules, dynamic form validation, interactive client-side components, and responsive front-end web layouts. Worked on cross-browser UI modules, dynamic form validations, and responsiveness
+                            <div class="intern-action-btns">
+                                <a href="https://drive.google.com/file/d/1fIgkYExJUi7HKpvnkhpD34-DElp7xg4x/view?usp=drive_link" target="_blank" class="intern-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                    View Certificate
+                                </a>
+                                <a href="https://eduwebsoft.co.in/" target="_blank" class="intern-btn website-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                    View Website
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Live Email Sending Contact Form -->
-                <div class="col-lg-7" data-aos="fade-left">
-                    <div class="glass-card p-4 p-md-5">
-                        <form action="https://api.web3forms.com/submit" method="POST" id="contact-form">
-                            <!-- Integrated Web3Forms Access Key -->
-                            <input type="hidden" name="access_key" value="adce5312-55bd-4aca-8ffe-1ada66c86dbc">
-                            
-                            <!-- Email Subject in Inbox -->
-                            <input type="hidden" name="subject" value="New Portfolio Contact Form Submission">
+        <!-- 7. CERTIFICATES SECTION -->
+        <section id="certificates" class="certificates-section">
+            <div class="certs-container">
+                <div class="certs-badge-top">Achievements</div>
+                <h2 class="certs-main-title">My Certificates</h2>
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <input type="text" name="name" class="form-control glass-input" placeholder="Your Name" required>
+                <div class="certs-grid">
+                    <!-- Certificate 1 -->
+                    <div class="cert-card">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
                                 </div>
-                                <div class="col-md-6">
-                                    <input type="email" name="email" class="form-control glass-input" placeholder="Your Email" required>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
                                 </div>
-                                <div class="col-12">
+                            </div>
+                            <h3 class="cert-title">Introduction to Generative AI Studio</h3>
+                            <div class="cert-issuer">Google Cloud / Simplilearn</div>
+                            <p class="cert-desc">Introduction to Generative AI Studio explores Generative AI, prompt engineering, AI models, and responsible AI practices.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: March-2026</span>
+                            <a href="https://drive.google.com/file/d/1gmqa1PSgCsV7oQsDxMTAkv5Q9Llk1aJJ/view?usp=sharing" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate 2 -->
+                    <div class="cert-card highlighted">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                </div>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
+                                </div>
+                            </div>
+                            <h3 class="cert-title">Introduction to UX Design</h3>
+                            <div class="cert-issuer">IBM SkillsBuild</div>
+                            <p class="cert-desc">User Experience Principles, Information Architecture, Usability Testing & Accessibility.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: August 2026</span>
+                            <a href="https://drive.google.com/file/d/1Cbu-3hya--s2IDufd-bEO5_Np0jPRdnk/view?usp=drive_link" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate 3 -->
+                    <div class="cert-card">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                </div>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
+                                </div>
+                            </div>
+                            <h3 class="cert-title">PowerBI Workshop</h3>
+                            <div class="cert-issuer">OfficeMaster</div>
+                            <p class="cert-desc">Gained practical knowledge of data visualization, dashboard creation, data analysis, and reporting using Microsoft Power BI.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: Jan-2026</span>
+                            <a href="https://drive.google.com/file/d/1E9YHzXydDqIEgs9dJwGbS_a_tecxDtXz/view?usp=drive_link" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate 4 -->
+                    <div class="cert-card">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                </div>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
+                                </div>
+                            </div>
+                            <h3 class="cert-title">JAVASCRIPT COURSE</h3>
+                            <div class="cert-issuer">STP COMPUTER EDUCATION</div>
+                            <p class="cert-desc">Completed a 3-month JavaScript course covering fundamentals, programming concepts, and web development.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: November-2023</span>
+                            <a href="https://drive.google.com/file/d/17WwU380jESkOMj6-VZZGzwTAvcejBXR8/view?usp=drive_link" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate 5 -->
+                    <div class="cert-card">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                </div>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
+                                </div>
+                            </div>
+                            <h3 class="cert-title">CSS COURSE</h3>
+                            <div class="cert-issuer">STP COMPUTER EDUCATION</div>
+                            <p class="cert-desc">Completed a comprehensive CSS course covering selectors, properties, layout techniques, and responsive design principles.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: Aug-2023</span>
+                            <a href="https://drive.google.com/file/d/10jOHJc7pPS3XeIhX2KV3nEhJ4czpnmah/view?usp=drive_link" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate 6 -->
+                    <div class="cert-card">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                </div>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
+                                </div>
+                            </div>
+                            <h3 class="cert-title">Bootcamp: RTL, IP Integration, and SoC Signoff</h3>
+                            <div class="cert-issuer">NIELIT</div>
+                            <p class="cert-desc">Completed 90-hour course on RTL design, IP integration, and SoC signoff processes.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: Jan-2026</span>
+                            <a href="https://drive.google.com/file/d/1zxsrHTCaweCBrcjEl2apmRxMI5F7u-F9/view?usp=drive_link" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate 7 -->
+                    <div class="cert-card">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                </div>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
+                                </div>
+                            </div>
+                            <h3 class="cert-title">Introduction to Gemini for Google Workspace</h3>
+                            <div class="cert-issuer">Google Cloud/Coursera</div>
+                            <p class="cert-desc">Gained foundational knowledge of generative AI tools to enhance productivity across Workspace apps.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: Nov-2025</span>
+                            <a href="https://drive.google.com/file/d/1KePoUKeypf_6eAsTqv8GIHz4aXW5TUkG/view?usp=sharing" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate 8 -->
+                    <div class="cert-card">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                </div>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
+                                </div>
+                            </div>
+                            <h3 class="cert-title">Microsoft PowerPoint</h3>
+                            <div class="cert-issuer">Coursera</div>
+                            <p class="cert-desc">Completed project on creating, formatting, designing, and presenting professional PowerPoint decks.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: Nov-2025</span>
+                            <a href="https://drive.google.com/file/d/1go9Aaq0Adcbln7tKHddgNn9RONOqwaT2/view?usp=drive_link" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate 9 -->
+                    <div class="cert-card">
+                        <div>
+                            <div class="cert-header-row">
+                                <div class="cert-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                                </div>
+                                <div class="verified-badge">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Verified
+                                </div>
+                            </div>
+                            <h3 class="cert-title">Technology Job Simulation</h3>
+                            <div class="cert-issuer">Deloitte</div>
+                            <p class="cert-desc">Completed practical tasks in coding and development, gaining hands-on software development experience.</p>
+                        </div>
+                        <div class="cert-footer-row">
+                            <span class="cert-date">Issued: Jan 17 -2026</span>
+                            <a href="https://drive.google.com/file/d/15yAFWjBuPJoEEdZTYp0l-w-Swn9N7g1K/view?usp=drive_link" target="_blank" class="cert-view-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 8. CONTACT SECTION (FIXED & ALIGNED WITH PORTFOLIO DESIGN) -->
+        <section id="contact" class="content-section-contact">
+            <div class="container py-5" style="max-width: 1300px; margin: 0 auto; width: 100%;">
+                <div class="text-center mb-5" data-aos="fade-up" style="margin-bottom: 50px;">
+                    <h6 class="about-top-label" style="text-align: center;">Get In Touch</h6>
+                    <h2 class="section-header" style="justify-content: center; margin-bottom: 0;"><span>//</span> Contact Me</h2>
+                </div>
+                <div class="contact-grid">
+                    <!-- Contact Info Column -->
+                    <div data-aos="fade-right">
+                        <div class="glass-card p-4 p-md-5 h-100" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                            <h4 class="text-light mb-4" style="color: #fff; font-size: 1.5rem; font-weight: 700; margin-bottom: 24px;">Let's Connect</h4>
+                            <div class="d-flex align-items-center mb-4" style="display: flex; align-items: center; margin-bottom: 24px;">
+                                <div class="glass-icon me-3" style="margin-right: 16px;"><i class="fa-solid fa-location-dot"></i></div>
+                                <div>
+                                    <h6 class="text-light mb-0" style="color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 4px;">Location</h6>
+                                    <small class="text-muted" style="color: var(--text-muted); font-size: 0.9rem;">Balasore, Odisha, India</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-4" style="display: flex; align-items: center; margin-bottom: 24px;">
+                                <div class="glass-icon me-3" style="margin-right: 16px;"><i class="fa-solid fa-envelope"></i></div>
+                                <div>
+                                    <h6 class="text-light mb-0" style="color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 4px;">Email</h6>
+                                    <small class="text-muted" style="color: var(--text-muted); font-size: 0.9rem;">pabitranayak0017@gmail.com</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center" style="display: flex; align-items: center;">
+                                <div class="glass-icon me-3" style="margin-right: 16px;"><i class="fa-solid fa-phone"></i></div>
+                                <div>
+                                    <h6 class="text-light mb-0" style="color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 4px;">Phone</h6>
+                                    <small class="text-muted" style="color: var(--text-muted); font-size: 0.9rem;">+91 6371258564</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Email Sending Contact Form Column -->
+                    <div data-aos="fade-left">
+                        <div class="glass-card p-4 p-md-5">
+                            <form action="https://api.web3forms.com/submit" method="POST" id="contact-form" class="contact-form">
+                                <!-- Integrated Web3Forms Access Key -->
+                                <input type="hidden" name="access_key" value="adce5312-55bd-4aca-8ffe-1ada66c86dbc">
+                                
+                                <!-- Email Subject in Inbox -->
+                                <input type="hidden" name="subject" value="New Portfolio Contact Form Submission">
+
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                                    <div>
+                                        <input type="text" name="name" class="form-control glass-input" placeholder="Your Name" required>
+                                    </div>
+                                    <div>
+                                        <input type="email" name="email" class="form-control glass-input" placeholder="Your Email" required>
+                                    </div>
+                                </div>
+                                <div>
                                     <input type="text" name="custom_subject" class="form-control glass-input" placeholder="Subject" required>
                                 </div>
-                                <div class="col-12">
+                                <div>
                                     <textarea name="message" class="form-control glass-input" rows="5" placeholder="Your Message" required></textarea>
                                 </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-gradient w-100 py-3">Send Message <i class="fa-solid fa-paper-plane ms-2"></i></button>
+                                <div>
+                                    <button type="submit" class="btn btn-gradient w-100 py-3" style="width: 100%;">Send Message <i class="fa-solid fa-paper-plane ms-2" style="margin-left: 8px;"></i></button>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Footer -->
-    <footer class="glass-footer py-4 border-top border-secondary border-opacity-25">
-        <div class="container text-center">
-            <p class="text-muted mb-0">&copy; Pabitra Nayak | Computer Science Student</p>
+    <!-- CONFIRMATION MODAL -->
+    <div class="custom-modal" id="modal">
+        <div class="modal-card">
+            <h3 style="color: var(--purple-light); margin-bottom: 12px; font-size: 1.4rem;">TRANSMISSION RECEIVED</h3>
+            <p style="color: var(--text-muted); margin-bottom: 22px; font-size: 0.95rem;">Thank you for reaching out! I will respond to your message promptly.</p>
+            <button class="submit-btn" id="modal-close">CLOSE</button>
         </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 PABITRA NAYAK. ALL RIGHTS RESERVED.</p>
     </footer>
 
-    <!-- Back To Top Button -->
-    <a href="#hero" id="backToTop" class="glass-icon position-fixed bottom-0 end-0 m-4 text-light"><i class="fa-solid fa-arrow-up"></i></a>
+    <!-- ==========================================================================
+       SCRIPT ENGINE
+       ========================================================================== -->
+    <script>
+        let progress = 0;
+        const loaderFill = document.getElementById('loader-fill');
+        const loaderPercent = document.getElementById('loader-percent');
+        const preloader = document.getElementById('preloader');
 
-    <!-- JavaScript Dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <!-- Custom Application Logic -->
-    <script src="assets/js/script.js"></script>
+        const interval = setInterval(() => {
+            progress += Math.floor(Math.random() * 8) + 4;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    preloader.classList.add('loaded');
+                }, 300);
+            }
+            loaderFill.style.width = `${progress}%`;
+            loaderPercent.textContent = `${progress}%`;
+        }, 40);
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        const words = [
+            "DATA ANALYST DEVELOPER",
+            "SOFTWARE DEVELOPER",
+            "FRONTEND DEVELOPER",
+            "3D INTERFACE SPECIALIST",
+            "UI/UX DESIGN ENGINEER"
+        ];
+        let i = 0;
+
+        function typingEffect() {
+            let word = words[i].split("");
+            var loopTyping = function() {
+                if (word.length > 0) {
+                    document.getElementById('typing-text').textContent += word.shift();
+                } else {
+                    setTimeout(deletingEffect, 2000);
+                    return;
+                }
+                setTimeout(loopTyping, 90);
+            };
+            loopTyping();
+        }
+
+        function deletingEffect() {
+            let word = words[i].split("");
+            var loopDeleting = function() {
+                if (word.length > 0) {
+                    word.pop();
+                    document.getElementById('typing-text').textContent = word.join("");
+                } else {
+                    i = (i + 1) % words.length;
+                    setTimeout(typingEffect, 400);
+                    return;
+                }
+                setTimeout(loopDeleting, 40);
+            };
+            loopDeleting();
+        }
+
+        typingEffect();
+
+        /* --- 3D ROTATING & FLOATING TECH BALLOONS ENGINE --- */
+        const orbs = document.querySelectorAll('.tech-orb');
+        let t = 0;
+
+        function animateOrbs() {
+            t += 0.015;
+            const isMobile = window.innerWidth <= 768;
+            const containerWidth = document.getElementById('orbs-field').clientWidth;
+            const scaleFactor = isMobile ? containerWidth / 1000 : 1;
+
+            orbs.forEach(orb => {
+                let radius = parseFloat(orb.dataset.radius) * scaleFactor;
+                let speed = parseFloat(orb.dataset.speed);
+                let angle = parseFloat(orb.dataset.angle) + (t * speed * 60);
+                let yOffset = parseFloat(orb.dataset.yoffset);
+
+                let x = Math.cos(angle) * radius;
+                let z = Math.sin(angle) * (radius * 0.35);
+                let floatY = Math.sin(t * 2 + angle) * 15;
+
+                let scale = 0.75 + (z + radius * 0.35) / (radius * 0.7) * 0.45;
+                let opacity = 0.5 + (scale - 0.75) * 1.25;
+                let zIndex = Math.round(scale * 100);
+
+                orb.style.transform = `translate3d(${x}px, ${z + yOffset + floatY}px, 0px) scale(${scale})`;
+                orb.style.opacity = Math.min(1, Math.max(0.45, opacity));
+                orb.style.zIndex = zIndex;
+            });
+
+            requestAnimationFrame(animateOrbs);
+        }
+
+        animateOrbs();
+
+        /* --- PROJECTS CAROUSEL SLIDER ENGINE --- */
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.work-slide');
+        const dots = document.querySelectorAll('#work-nav-dots .work-dot');
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            slideIndex = (n + slides.length) % slides.length;
+            slides[slideIndex].classList.add('active');
+            dots[slideIndex].classList.add('active');
+        }
+
+        function currentWorkSlide(n) {
+            showSlide(n);
+        }
+
+        document.getElementById('work-next').addEventListener('click', () => {
+            showSlide(slideIndex + 1);
+        });
+
+        document.getElementById('work-prev').addEventListener('click', () => {
+            showSlide(slideIndex - 1);
+        });
+
+        const mouse = {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+            targetX: window.innerWidth / 2,
+            targetY: window.innerHeight / 2
+        };
+
+        const orbPos = {
+            x: window.innerWidth * 0.75,
+            y: window.innerHeight * 0.7,
+            currentX: window.innerWidth * 0.75,
+            currentY: window.innerHeight * 0.7
+        };
+
+        const purpleOrbEl = document.getElementById('purple-orb');
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.targetX = e.clientX;
+            mouse.targetY = e.clientY;
+        });
+
+        const canvas = document.getElementById('character-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let animTime = 0;
+
+        function updateOrbPosition() {
+            const scrollY = window.scrollY;
+            const maxScroll = Math.max(1, document.body.scrollHeight - window.innerHeight);
+            const scrollPercent = Math.min(1, Math.max(0, scrollY / maxScroll));
+
+            const scrollWaveX = Math.sin(scrollPercent * Math.PI * 3.5) * (window.innerWidth * 0.35);
+            const scrollWaveY = (scrollPercent * window.innerHeight * 0.6) - (window.innerHeight * 0.2);
+
+            const baseOrbX = (window.innerWidth * 0.5) + scrollWaveX;
+            const baseOrbY = (window.innerHeight * 0.5) + scrollWaveY;
+
+            const mousePullX = (mouse.targetX - window.innerWidth / 2) * 0.12;
+            const mousePullY = (mouse.targetY - window.innerHeight / 2) * 0.12;
+
+            const floatWiggleX = Math.cos(animTime * 1.8) * 18;
+            const floatWiggleY = Math.sin(animTime * 2.2) * 22;
+
+            orbPos.x = baseOrbX + mousePullX + floatWiggleX;
+            orbPos.y = baseOrbY + mousePullY + floatWiggleY;
+
+            orbPos.currentX += (orbPos.x - orbPos.currentX) * 0.08;
+            orbPos.currentY += (orbPos.y - orbPos.currentY) * 0.08;
+
+            purpleOrbEl.style.transform = `translate3d(${orbPos.currentX - 22}px, ${orbPos.currentY - 22}px, 0)`;
+        }
+
+        function drawCharacter() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            animTime += 0.035;
+
+            updateOrbPosition();
+
+            mouse.x += (mouse.targetX - mouse.x) * 0.06;
+            mouse.y += (mouse.targetY - mouse.y) * 0.06;
+
+            const heroCenterX = canvas.width / 2;
+            const heroCenterY = canvas.height / 2 + 70;
+
+            const offsetX = (mouse.x - canvas.width / 2) / (canvas.width / 2);
+            const offsetY = (mouse.y - canvas.height / 2) / (canvas.height / 2);
+
+            const breathY = Math.sin(animTime * 1.6) * 6;
+
+            ctx.save();
+            ctx.translate(heroCenterX, heroCenterY + breathY);
+
+            ctx.beginPath();
+            ctx.moveTo(-180, 110);
+            ctx.lineTo(210, 110);
+            ctx.lineTo(180, 140);
+            ctx.lineTo(-210, 140);
+            ctx.closePath();
+            ctx.fillStyle = '#27272a';
+            ctx.fill();
+            ctx.strokeStyle = '#52525b';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = '#18181b';
+            ctx.fillRect(80, 15, 75, 55);
+            ctx.strokeStyle = '#71717a';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(80, 15, 75, 55);
+
+            ctx.fillStyle = 'rgba(168, 85, 247, 0.4)';
+            ctx.fillRect(84, 19, 67, 47);
+
+            ctx.beginPath();
+            ctx.moveTo(-185, 270);
+            ctx.quadraticCurveTo(-145, 100, -85, 85);
+            ctx.quadraticCurveTo(0, 70, 85, 85);
+            ctx.quadraticCurveTo(145, 100, 185, 270);
+            ctx.closePath();
+
+            const hoodieGradient = ctx.createLinearGradient(-150, 70, 150, 270);
+            hoodieGradient.addColorStop(0, '#52525b');
+            hoodieGradient.addColorStop(0.5, '#3f3f46');
+            hoodieGradient.addColorStop(1, '#27272a');
+            ctx.fillStyle = hoodieGradient;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.ellipse(0, 85, 58, 18, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#18181b';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.rect(-28, 20, 56, 70);
+            const neckGradient = ctx.createLinearGradient(-28, 0, 28, 0);
+            neckGradient.addColorStop(0, '#d4a373');
+            neckGradient.addColorStop(0.5, '#e0a96d');
+            neckGradient.addColorStop(1, '#c58b4e');
+            ctx.fillStyle = neckGradient;
+            ctx.fill();
+
+            const headX = offsetX * 20;
+            const headY = offsetY * 12;
+
+            ctx.save();
+            ctx.translate(headX, headY);
+
+            ctx.beginPath();
+            ctx.ellipse(-82, -15, 15, 24, -0.1, 0, Math.PI * 2);
+            ctx.ellipse(82, -15, 15, 24, 0.1, 0, Math.PI * 2);
+            ctx.fillStyle = '#d4a373';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.ellipse(0, -25, 80, 92, 0, 0, Math.PI * 2);
+            const headGradient = ctx.createRadialGradient(-15, -55, 10, 0, -25, 95);
+            headGradient.addColorStop(0, '#f2ca98');
+            headGradient.addColorStop(0.7, '#e0a96d');
+            headGradient.addColorStop(1, '#c58b4e');
+            ctx.fillStyle = headGradient;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(-78, -10);
+            ctx.quadraticCurveTo(-82, 45, -50, 68);
+            ctx.quadraticCurveTo(0, 80, 50, 68);
+            ctx.quadraticCurveTo(82, 45, 78, -10);
+            ctx.quadraticCurveTo(60, 25, 0, 32);
+            ctx.quadraticCurveTo(-60, 25, -78, -10);
+            ctx.fillStyle = '#18181b';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(-32, 12);
+            ctx.quadraticCurveTo(0, 2, 32, 12);
+            ctx.quadraticCurveTo(18, 28, 0, 24);
+            ctx.quadraticCurveTo(-18, 28, -32, 12);
+            ctx.fillStyle = '#18181b';
+            ctx.fill();
+
+            const pupilOffsetX = offsetX * 6;
+            const pupilOffsetY = offsetY * 4;
+
+            ctx.beginPath();
+            ctx.ellipse(-32, -28, 16, 18, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(-32 + pupilOffsetX, -28 + pupilOffsetY, 8, 0, Math.PI * 2);
+            ctx.fillStyle = '#0f172a';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.ellipse(32, -28, 16, 18, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(32 + pupilOffsetX, -28 + pupilOffsetY, 8, 0, Math.PI * 2);
+            ctx.fillStyle = '#0f172a';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(-52, -54 + offsetY * 2);
+            ctx.quadraticCurveTo(-32, -62, -12, -52);
+            ctx.moveTo(12, -52);
+            ctx.quadraticCurveTo(32, -62, 52, -54 + offsetY * 2);
+            ctx.strokeStyle = '#09090b';
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, -8, 6, 0, Math.PI);
+            ctx.strokeStyle = '#b47b43';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.ellipse(0, -78, 98, 26, 0.05, 0, Math.PI * 2);
+            const brimGradient = ctx.createLinearGradient(-90, -80, 90, -70);
+            brimGradient.addColorStop(0, '#18181b');
+            brimGradient.addColorStop(1, '#27272a');
+            ctx.fillStyle = brimGradient;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(0, -78, 76, Math.PI, 0, false);
+            const capGradient = ctx.createLinearGradient(-50, -150, 50, -70);
+            capGradient.addColorStop(0, '#ffffff');
+            capGradient.addColorStop(0.7, '#f4f4f5');
+            capGradient.addColorStop(1, '#e4e4e7');
+            ctx.fillStyle = capGradient;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(0, -152, 7, 0, Math.PI * 2);
+            ctx.fillStyle = '#d4d4d8';
+            ctx.fill();
+
+            ctx.restore();
+            ctx.restore();
+
+            requestAnimationFrame(drawCharacter);
+        }
+
+        drawCharacter();
+
+        const observerOptions = { threshold: 0.2 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        const contactForm = document.getElementById('contact-form');
+        const modal = document.getElementById('modal');
+
+        contactForm.addEventListener('submit', (e) => {
+            // Let Web3Forms handle submission via POST action or fetch if desired.
+            // Keeping default POST action behavior with Web3Forms endpoint:
+            // The modal will show when the form is submitted.
+        });
+    </script>
 </body>
 </html>
